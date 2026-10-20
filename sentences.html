@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>French Sentence Lab</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E1A2B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>html,body{margin:0;height:100%;background:#0E1A2B}</style>
+<script src="dc.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #C6F36B;outline-offset:2px}
+button:disabled{cursor:default}
+input::placeholder{color:#A9B4C6}
+</style>
+</helmet>
+<div style="width:100%;max-width:520px;margin:0 auto;height:100vh;height:100dvh;box-sizing:border-box;display:flex;flex-direction:column;background:#0E1A2B;color:#F3F1EA;font-family:'DM Sans',system-ui,sans-serif;overflow:hidden;position:relative">
+
+<!-- HOME -->
+<sc-if value="{{isHome}}" hint-placeholder-val="{{ true }}">
+<div style="flex:1;min-height:0;overflow-y:auto;padding:56px 24px 40px;display:flex;flex-direction:column;gap:16px">
+<a href="index.html" style="display:inline-flex;align-items:center;gap:6px;color:#C6F36B;font-weight:700;font-size:14px;text-decoration:none;min-height:44px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+Vocabulary
+</a>
+<div>
+<div style="font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#C6F36B">Chapter two</div>
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:36px;line-height:1.05;margin-top:6px">Sentence Lab</div>
+<div style="font-size:15px;color:#A9B4C6;margin-top:8px;line-height:1.4">Words are bricks. Here you build the wall: hear a sentence, assemble it, fill the gap, write it down.</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<div style="background:#172A44;border-radius:14px;padding:12px"><div style="font-size:12px;color:#A9B4C6;font-weight:700">Levels cleared</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:28px">{{nDone}} <span style="font-size:16px;color:#A9B4C6">/ 8</span></div></div>
+<div style="background:#172A44;border-radius:14px;padding:12px"><div style="font-size:12px;color:#A9B4C6;font-weight:700">Sentences</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:28px">{{nSent}}</div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{levels}}" as="l" hint-placeholder-count="8">
+<button onClick="{{l.open}}" style="display:flex;align-items:center;gap:14px;text-align:left;background:#172A44;border:2px solid {{l.border}};border-radius:16px;padding:14px;color:#F3F1EA;width:100%">
+<span style="{{l.badge}}">{{l.n}}</span>
+<span style="flex:1;min-width:0"><span style="display:block;font-weight:700;font-size:17px">{{l.title}}</span><span style="display:block;font-size:13px;color:#A9B4C6;margin-top:2px">{{l.sub}}</span></span>
+<span style="font-size:13px;font-weight:700;color:{{l.tagColor}}">{{l.tag}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- INTRO -->
+<sc-if value="{{isIntro}}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column">
+<div style="padding:52px 16px 4px;display:flex;align-items:center;gap:4px">
+<button onClick="{{goHome}}" aria-label="Back to levels" style="width:44px;height:44px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F3F1EA" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+<div style="font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#C6F36B">Level {{lvN}}</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:4px 24px 16px;display:flex;flex-direction:column;gap:12px">
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:30px;line-height:1.1">{{lvTitle}}</div>
+<sc-for list="{{tips}}" as="t" hint-placeholder-count="2">
+<div style="background:#172A44;border-radius:16px;padding:14px"><div style="font-weight:700;font-size:16px;color:#C6F36B">{{t.title}}</div><div style="font-size:14px;line-height:1.45;margin-top:4px;color:#DDE3EE">{{t.body}}</div></div>
+</sc-for>
+<div style="font-size:13px;font-weight:700;color:#A9B4C6;margin-top:6px">Read and hear the sentences first</div>
+<div style="background:#172A44;border-radius:16px;overflow:hidden;flex:none">
+<sc-for list="{{preview}}" as="p" hint-placeholder-count="8">
+<div style="display:flex;align-items:center;gap:8px;padding:6px 6px 6px 14px;border-bottom:1px solid #0E1A2B">
+<span style="flex:1;min-width:0"><span style="display:block;font-weight:700;font-size:15px;line-height:1.25">{{p.fr}}</span><span style="display:block;font-size:13px;color:#A9B4C6;margin-top:1px">{{p.en}}</span></span>
+<button onClick="{{p.say}}" aria-label="Hear the sentence" style="width:44px;height:44px;border:0;background:transparent;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="padding:12px 24px 32px"><button onClick="{{startLevel}}" style="width:100%;background:#C6F36B;color:#0E1A2B;border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px">Start the exercises</button></div>
+</div>
+</sc-if>
+
+<!-- PLAY -->
+<sc-if value="{{isPlay}}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column">
+<div style="padding:52px 20px 8px;display:flex;align-items:center;gap:12px">
+<button onClick="{{quit}}" aria-label="Quit" style="width:44px;height:44px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F3F1EA" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+<div style="flex:1;height:12px;background:#172A44;border-radius:999px;overflow:hidden"><div style="{{bar}}"></div></div>
+<div style="font-size:14px;font-weight:700;min-width:46px;text-align:right">{{pos}}</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:12px 24px;display:flex;flex-direction:column;gap:18px">
+<div>
+<div style="font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#C6F36B">{{ex.label}}</div>
+<div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+<sc-if value="{{showText}}" hint-placeholder-val="{{ true }}"><div style="flex:1;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:24px;line-height:1.2">{{promptText}}</div></sc-if>
+<sc-if value="{{hearOnly}}" hint-placeholder-val="{{ false }}"><div style="flex:1;font-size:15px;color:#A9B4C6">Tap the speaker to hear the sentence.</div></sc-if>
+<sc-if value="{{hasSpeaker}}" hint-placeholder-val="{{ false }}">
+<button onClick="{{replay}}" aria-label="Hear the sentence" style="width:56px;height:56px;flex:none;border:2px solid #C6F36B;background:#172A44;border-radius:16px;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+</sc-if>
+</div>
+<sc-if value="{{hearOnly}}" hint-placeholder-val="{{ false }}">
+<button onClick="{{toggleReveal}}" style="margin-top:6px;border:0;background:transparent;color:#C6F36B;font-weight:700;font-size:14px;min-height:44px;padding:0;text-align:left">{{revealLabel}}</button>
+<div style="font-size:16px;font-weight:700">{{revealText}}</div>
+</sc-if>
+</div>
+
+<sc-if value="{{isBuild}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="min-height:104px;border-top:2px solid #C6F36B;border-bottom:2px solid #C6F36B;padding:14px 0;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start">
+<sc-for list="{{builtTiles}}" as="b" hint-placeholder-count="2"><button onClick="{{b.remove}}" style="{{b.style}}">{{b.text}}</button></sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{bankTiles}}" as="t" hint-placeholder-count="6"><button onClick="{{t.pick}}" style="{{t.style}}">{{t.text}}</button></sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isGap}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:26px;line-height:1.25;margin-bottom:6px">{{gapSentence}}</div>
+<sc-for list="{{opts}}" as="o" hint-placeholder-count="4"><button onClick="{{o.pick}}" style="{{o.style}}">{{o.text}}</button></sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{isType}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<input type="text" value="{{typed}}" onChange="{{onType}}" disabled="{{checked}}" aria-label="Write the sentence" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="Write what you hear" style="{{inputStyle}}">
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{accents}}" as="a" hint-placeholder-count="12"><button onClick="{{a.add}}" aria-label="Add {{a.ch}}" style="min-width:44px;min-height:44px;border:1.5px solid #3A4F70;background:#172A44;border-radius:10px;font-size:18px;color:#F3F1EA">{{a.ch}}</button></sc-for>
+</div>
+</div>
+</sc-if>
+</div>
+
+<div style="{{fbStyle}}">
+<sc-if value="{{checked}}" hint-placeholder-val="{{ false }}"><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:20px;line-height:1.2">{{fbTitle}}</div><div style="font-size:14px;line-height:1.35">{{fbSub}}</div></sc-if>
+<sc-if value="{{notChecked}}" hint-placeholder-val="{{ true }}"><button onClick="{{check}}" disabled="{{cantCheck}}" style="{{checkBtn}}">Check</button></sc-if>
+<sc-if value="{{checked}}" hint-placeholder-val="{{ false }}"><button onClick="{{next}}" style="{{nextBtn}}">Continue</button></sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- RESULT -->
+<sc-if value="{{isResult}}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column;padding:96px 24px 32px;gap:20px">
+<div>
+<div style="font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#C6F36B">Level {{lvN}} · {{lvTitle}}</div>
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:44px;line-height:1.05;margin-top:8px">Level cleared!</div>
+<div style="font-size:16px;color:#A9B4C6;margin-top:10px;line-height:1.4">{{resultText}}</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<div style="background:#172A44;border-radius:14px;padding:14px"><div style="font-size:12px;color:#A9B4C6;font-weight:700">Exercises</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:30px">{{resTotal}}</div></div>
+<div style="background:#172A44;border-radius:14px;padding:14px"><div style="font-size:12px;color:#A9B4C6;font-weight:700">Mistakes</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:30px">{{resMistakes}}</div></div>
+</div>
+<div style="flex:1"></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<button onClick="{{nextLevel}}" style="background:#C6F36B;color:#0E1A2B;border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px">{{nextLabel}}</button>
+<button onClick="{{goHome}}" style="background:transparent;color:#F3F1EA;border:1.5px solid #F3F1EA;border-radius:14px;min-height:52px;font-weight:700;font-size:16px">All levels</button>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+// Sentence format: fr | en | gap word | wrong options (comma) | extra tiles (comma)
+const LEVELS = [
+{ title: 'Introduce yourself', tips: [['Verbs you need','être: je suis, tu es, il est. avoir: j’ai, tu as, il a. s’appeler: je m’appelle, tu t’appelles. venir: je viens. habiter: j’habite.'],['Age','French says “I have 25 years”: J’ai vingt-cinq ans.']],
+  s: `Je m’appelle Sai.|My name is Sai.|m’appelle|s’appelle,m’appelles,appellent|suis,es
+Je suis indien.|I am Indian.|suis|ai,es,est|indienne,ai
+J’ai vingt-cinq ans.|I am twenty-five years old.|ai|suis,as,a|suis
+J’habite à Paris.|I live in Paris.|à|en,au,aux|en
+Je viens de France.|I come from France.|viens|vient,venez,venir|vais
+Comment tu t’appelles ?|What is your name?|t’appelles|m’appelle,s’appelle,appelles|vous
+Bonjour, comment ça va ?|Hello, how are you?||ce,va|bien
+Je ne comprends pas.|I don’t understand.|pas|non,sans,oui|jamais
+Il s’appelle Paul.|His name is Paul.|s’appelle|m’appelle,t’appelles,appellent|
+Nous sommes étudiants.|We are students.|sommes|suis,êtes,sont|
+Vous êtes français ?|Are you French?|êtes|es,sommes,est|
+Elle a trente ans.|She is thirty years old.|a|ai,as,ont|
+Ils habitent en France.|They live in France.|habitent|habite,habitons,habiter|
+Enchanté, je suis content.|Nice to meet you, I am happy.|content|contente,contents,triste|
+Merci, au revoir !|Thank you, goodbye!||bonjour,pardon|
+Je parle anglais et un peu français.|I speak English and a little French.|parle|parles,parlons,parler|` },
+{ title: 'Ask questions', tips: [['Question words','qui (who), où (where), quand (when), pourquoi (why), comment (how), combien (how much).'],['Three ways to ask','Raise your voice: Tu aimes ça ? Add est-ce que: Est-ce que tu aimes ça ? Or invert: Aimes-tu ça ?']],
+  s: `Où est la gare ?|Where is the station?|Où|Qui,Quand,Pourquoi|elle
+Qu’est-ce que c’est ?|What is it?|c’est|ce,ces,être|il
+Comment allez-vous ?|How are you? (formal)||vas,tu|
+C’est combien ?|How much is it?||ils,quand|
+Tu habites où ?|Where do you live?|habites|habite,habitons,habiter|habitez
+Pourquoi tu apprends le français ?|Why are you learning French?|apprends|apprend,apprenez,apprendre|anglais
+Est-ce que tu aimes la musique ?|Do you like music?|aimes|aime,aimons,aimer|le
+Quel est ton numéro ?|What is your number?|ton|ta,tes,leurs|quelle
+Qui est-ce ?|Who is it?|Qui|Quand,Où,Comment|
+Quand est le rendez-vous ?|When is the appointment?|Quand|Qui,Où,Pourquoi|
+Combien de frères as-tu ?|How many brothers do you have?|Combien|Comment,Quand,Où|
+Vous avez des enfants ?|Do you have children?|avez|avons,ont,avoir|
+Comment tu vas ?|How are you doing?|vas|va,vais,vont|
+Pourquoi il pleure ?|Why is he crying?|Pourquoi|Quand,Combien,Qui|
+Tu veux un café ?|Do you want a coffee?|veux|veut,voulez,voulons|
+Où sont mes clés ?|Where are my keys?|sont|est,es,suis|` },
+{ title: 'Eat and order', tips: [['Politeness','Je voudrais… (I would like) is the polite way to order. Add s’il vous plaît.'],['Some and no','du, de la, de l’, des mean “some”. After a negative they become de: Il n’y a pas de sel.'],['Verbs','prendre: je prends, nous prenons. boire: je bois, nous buvons.']],
+  s: `Je voudrais un café, s’il vous plaît.|I would like a coffee, please.|voudrais|voulons,voulez,voudrait|veux,une
+Nous prenons du pain et du fromage.|We are having bread and cheese.|prenons|prends,prennent,prendre|beurre
+Elle mange une pomme.|She eats an apple.|une|un,du,des|
+Je bois de l’eau.|I drink water.|bois|boit,buvons,boire|du
+L’addition, s’il vous plaît.|The bill, please.||merci,le|
+Il n’y a pas de sel.|There is no salt.|pas|non,sans,rien|du
+Le poulet est très bon.|The chicken is very good.|très|beaucoup,mal,vite|belle
+J’aime le chocolat et la glace.|I like chocolate and ice cream.||ou,les|
+Nous voulons de l’eau.|We want some water.|voulons|veux,veulent,voulez|
+Il boit du lait.|He drinks milk.|boit|bois,boivent,boire|
+Je prends une salade.|I will have a salad.|prends|prend,prenons,prendre|
+Vous voulez du riz ou des pâtes ?|Do you want rice or pasta?|ou|et,mais,avec|
+Le petit déjeuner est prêt.|Breakfast is ready.|prêt|prête,prêts,chaud|
+J’adore le fromage.|I love cheese.|le|la,les,l’|
+Elle n’aime pas le poisson.|She does not like fish.|pas|non,jamais,sans|
+Un verre de vin rouge, s’il vous plaît.|A glass of red wine, please.|rouge|rouges,rougi,bleu|` },
+{ title: 'Find your way', tips: [['aller','je vais, tu vas, il va, nous allons, vous allez, ils vont. Near future: je vais manger.'],['À, au, en','à la gare, au cinéma, en France, aux États-Unis. Cities take à: à Paris.'],['Directions','Tournez à gauche. Allez tout droit. La banque est à côté de la poste.']],
+  s: `Je vais à la gare.|I am going to the station.|vais|va,allons,aller|au
+La banque est près de la poste.|The bank is near the post office.||loin,sur|
+Allez tout droit, puis tournez à gauche.|Go straight ahead, then turn left.|tournez|tournes,tourner,tournent|droite
+Le musée est loin d’ici.|The museum is far from here.||près,là|
+Je prends le bus.|I take the bus.|prends|prend,prenons,prendre|train
+Il y a un parc en face de l’école.|There is a park opposite the school.||sur,la|
+Nous allons à pied.|We go on foot.|allons|allez,vais,vont|
+Je voudrais un billet pour Paris.|I would like a ticket for Paris.|pour|avec,sans,sur|
+Où est le métro ?|Where is the metro?|Où|Qui,Quand,Pourquoi|
+Tournez à droite au feu.|Turn right at the light.|Tournez|Tourner,Tournes,Tournent|
+La pharmacie est à côté de la banque.|The pharmacy is next to the bank.|côté|coté,cote,près|
+Nous allons au cinéma.|We are going to the cinema.|au|à,en,aux|
+Je vais en France.|I am going to France.|en|au,aux,à|
+Le train part à midi.|The train leaves at noon.|part|partir,partent,pars|
+Excusez-moi, c’est loin ?|Excuse me, is it far?|loin|long,loing,lent|
+Prenez la première rue à gauche.|Take the first street on the left.|Prenez|Prends,Prendre,Prennent|` },
+{ title: 'Family and description', tips: [['Agreement','Adjectives agree with the noun: gentil → gentille, grand → grande, noir → noirs.'],['My / your','mon (m.), ma (f.), mes (plural). ton, ta, tes. son, sa, ses.'],['Comparing','plus… que (more than), moins… que (less than), aussi… que (as … as).']],
+  s: `Ma mère est très gentille.|My mother is very kind.|gentille|gentil,gentils,gentilles|grand
+Mon père est grand.|My father is tall.|Mon|Ma,Mes,Sa|petit
+J’ai deux frères et une sœur.|I have two brothers and one sister.|une|un,des,du|
+Ma sœur est plus petite que moi.|My sister is smaller than me.|petite|petit,petits,petites|grande
+La maison est belle.|The house is beautiful.|belle|beau,beaux,bel|
+Elle a les cheveux noirs.|She has black hair.|noirs|noir,noire,noires|longs
+Mon grand-père est vieux mais il est gentil.|My grandfather is old but he is kind.|mais|ou,avec,sans|
+Nous avons un petit appartement.|We have a small flat.|avons|avez,ont,avoir|grand
+Mon frère est très drôle.|My brother is very funny.|Mon|Ma,Mes,Sa|
+Ma tante habite à Lyon.|My aunt lives in Lyon.|Ma|Mon,Mes,Ton|
+Mes parents sont gentils.|My parents are kind.|sont|est,es,suis|
+Elle est mince et blonde.|She is slim and blonde.|blonde|blond,blonds,blondes|
+Il a les yeux bleus.|He has blue eyes.|bleus|bleu,bleue,bleues|
+Nous sommes une grande famille.|We are a big family.|grande|grand,grands,grandes|
+Son fils a dix ans.|Her son is ten years old.|a|ai,as,ont|
+Mon cousin est plus grand que moi.|My cousin is taller than me.|que|qui,quoi,quand|` },
+{ title: 'Daily life and time', tips: [['Reflexive verbs','Add a pronoun: je me lève, tu te lèves, il se lève, nous nous levons.'],['The time','Il est huit heures. Il est huit heures et demie. À sept heures = at seven.'],['Weather','Il fait beau, il fait chaud, il fait froid. Il pleut.']],
+  s: `Je me lève à sept heures.|I get up at seven.|me|te,se,nous|dans
+Il est huit heures et demie.|It is half past eight.||quart,a|
+Le matin, je prends le petit déjeuner.|In the morning, I have breakfast.|prends|prend,prenons,prendre|soir
+Elle se couche tard.|She goes to bed late.|se|me,te,vous|tôt
+Aujourd’hui, il fait chaud.|Today, it is hot.|fait|est,a,y|froid
+Je travaille du lundi au vendredi.|I work from Monday to Friday.|travaille|travailles,travaillons,travailler|samedi
+Demain, nous avons un rendez-vous.|Tomorrow, we have an appointment.|avons|avez,ont,avoir|hier
+Souvent, je regarde un film le soir.|Often, I watch a film in the evening.|regarde|regardes,regardons,regarder|matin
+Je me douche le matin.|I shower in the morning.|me|te,se,nous|
+Il se réveille à six heures.|He wakes up at six.|se|me,te,nous|
+Il est midi et quart.|It is quarter past noon.|quart|demie,heure,moins|
+Nous dînons à huit heures.|We have dinner at eight.|dînons|dînez,dînent,dîner|
+Il pleut aujourd’hui.|It is raining today.|pleut|pleure,pleuvoir,plus|
+Le week-end, je dors tard.|At the weekend, I sleep late.|dors|dort,dormons,dormir|
+Elle finit le travail à cinq heures.|She finishes work at five.|finit|finis,finissons,finir|
+Il fait froid en hiver.|It is cold in winter.|fait|est,a,y|` },
+{ title: 'Past and future', tips: [['Past: passé composé','avoir + past participle: j’ai mangé, elle a regardé, nous avons visité. A few verbs use être: il est arrivé, je suis allé.'],['Near future','aller + infinitive: je vais acheter, nous allons voyager, ils vont manger.'],['Just now','venir de + infinitive: je viens de finir = I have just finished.']],
+  s: `Hier, j’ai mangé du poisson.|Yesterday, I ate fish.|j’ai|j’as,j’a,je|suis
+Elle a regardé un film.|She watched a film.|a|est,ai,as|
+Nous avons visité le musée.|We visited the museum.|avons|sommes,avez,ont|
+Il est arrivé à la gare.|He arrived at the station.|est|a,as,ont|
+Je viens de finir le travail.|I have just finished work.|de|à,en,pour|vais
+Nous allons voyager en train.|We are going to travel by train.|allons|allez,vont,aller|
+Ils vont manger au restaurant.|They are going to eat at the restaurant.|vont|va,allons,aller|
+Samedi, je vais acheter un cadeau.|On Saturday, I am going to buy a gift.|vais|va,vas,allons|
+Hier soir, j’ai regardé un film.|Last night I watched a film.|regardé|regarde,regarder,regardez|
+Tu as fini le travail ?|Did you finish the work?|as|ai,a,avons|
+Nous avons mangé au restaurant.|We ate at the restaurant.|mangé|manger,mange,mangez|
+Elle est allée à Paris.|She went to Paris.|allée|aller,allé,allés|
+Ils ont acheté une voiture.|They bought a car.|ont|a,ai,avons|
+Demain, je vais travailler.|Tomorrow I am going to work.|vais|vas,va,allons|
+Vous allez visiter Paris.|You are going to visit Paris.|allez|allons,vont,va|
+Je viens de manger.|I have just eaten.|viens|vient,venons,venir|` },
+{ title: 'Everyday situations', tips: [['Being polite','Excusez-moi, pardon, s’il vous plaît, merci. Use vous with strangers.'],['Asking for help','Répétez, s’il vous plaît. Parlez plus lentement. Je ne comprends pas.'],['Il faut','Il faut + infinitive = you must: Il faut payer.']],
+  s: `Je voudrais réserver une chambre.|I would like to book a room.|voudrais|voudrait,voulons,veulent|veux
+Excusez-moi, où est la pharmacie ?|Excuse me, where is the pharmacy?|est|sont,es,êtes|
+Je ne comprends pas, répétez, s’il vous plaît.|I don’t understand, please repeat.|répétez|répéter,répété,répètent|
+Pouvez-vous parler plus lentement ?|Can you speak more slowly?||peux,tu|
+Je cherche mon téléphone.|I am looking for my phone.|cherche|cherches,cherchons,chercher|ma
+Elle a perdu sa clé.|She lost her key.|sa|son,ses,mon|
+Il faut payer avec la carte bancaire.|You must pay with the bank card.|payer|paye,payons,payez|
+Je suis fatigué mais content.|I am tired but happy.|mais|ou,avec,sans|
+Pardon, je suis en retard.|Sorry, I am late.|retard|retarde,tard,retards|
+Je voudrais un rendez-vous.|I would like an appointment.|voudrais|voulons,voulez,veux|
+Où est le supermarché ?|Where is the supermarket?|Où|Qui,Quand,Pourquoi|
+Je cherche une pharmacie.|I am looking for a pharmacy.|cherche|cherches,cherchons,chercher|
+Il faut acheter du pain.|You need to buy bread.|acheter|acheté,achète,achetez|
+Vous avez la monnaie ?|Do you have change?|avez|avons,ont,avoir|
+Je n’ai pas de carte.|I do not have a card.|pas|non,sans,rien|
+Merci beaucoup, bonne journée !|Thank you very much, have a good day!|journée|jour,journées,journal|` }
+].map((L) => Object.assign({}, L, { s: L.s.split('\n').map((ln) => { const f = ln.split('|'); const wr = f[3] ? f[3].split(',') : [], ex = f[4] ? f[4].split(',') : []; return { fr: f[0], en: f[1], gap: f[2] || '', wrong: wr, extra: f[2] ? ex : ex.concat(wr) }; }) }));
+const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+const norm = (s) => String(s).toLowerCase().normalize('NFC').replace(/'/g, '’').replace(/[.,!?…;:]/g, '').replace(/\s+/g, ' ').trim();
+const plain = (s) => norm(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/œ/g, 'oe');
+const canSpeak = () => typeof speechSynthesis !== 'undefined' && typeof SpeechSynthesisUtterance !== 'undefined';
+const VOICES = { l: [] }, KEEP = []; let ttsAudio = null;
+const loadVoices = () => { try { VOICES.l = speechSynthesis.getVoices() || []; } catch (e) {} };
+try { loadVoices(); if (speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged', loadVoices); } catch (e) {}
+const vl = (v) => String(v.lang || '').toLowerCase().replace('_', '-');
+const pickVoice = (lang) => { loadVoices(); const L = lang.toLowerCase().replace('_', '-'); const fr = VOICES.l.filter((v) => vl(v).slice(0, 2) === L.slice(0, 2)); return fr.find((v) => vl(v) === L) || fr[0] || null; };
+const sayText = (text, lang, rate, cb) => {
+  let done = false, started = false, timer = null, fb = null;
+  const fin = () => { if (done) return; done = true; clearTimeout(timer); clearTimeout(fb); if (cb) cb(); };
+  const viaAudio = () => { if (done) return; try { if (ttsAudio) ttsAudio.pause(); const a = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + lang.slice(0, 2) + '&q=' + encodeURIComponent(text)); ttsAudio = a; a.onended = fin; a.onerror = fin; const pr = a.play(); if (pr && pr.catch) pr.catch(fin); } catch (e) { fin(); } };
+  try {
+    timer = setTimeout(fin, 4000 + text.length * 140);
+    if (!canSpeak()) { viaAudio(); return; }
+    if (ttsAudio) { try { ttsAudio.pause(); } catch (e) {} }
+    const u = new SpeechSynthesisUtterance(text); u.lang = lang; u.rate = rate || 0.9; u.volume = 1;
+    const v = pickVoice(lang); if (v) u.voice = v;
+    KEEP.push(u); if (KEEP.length > 8) KEEP.shift();
+    u.onstart = () => { started = true; };
+    u.onend = fin; u.onerror = () => { if (!started) viaAudio(); else fin(); };
+    if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+    try { speechSynthesis.resume(); } catch (e) {}
+    speechSynthesis.speak(u);
+    fb = setTimeout(() => { if (!started && !done) { try { speechSynthesis.cancel(); } catch (e) {} viaAudio(); } }, 1800);
+  } catch (e) { fin(); }
+};
+const speak = (text) => { sayText(text, 'fr-FR', 0.85); };
+const ACCENTS = ['é', 'è', 'ê', 'à', 'â', 'ç', 'ô', 'î', 'û', 'ù', 'ï', 'œ', '’'];
+const mk = (sn, type) => {
+  if (type === 'build') return { t: 'build', label: 'Build the sentence', prompt: sn.en, say: '', answer: sn.fr, tiles: shuffle(sn.fr.split(' ').concat(sn.extra)), sn };
+  if (type === 'hear') return { t: 'hear', label: 'Listen, then build it', prompt: '', say: sn.fr, answer: sn.fr, tiles: shuffle(sn.fr.split(' ').concat(sn.extra)), sn };
+  if (type === 'gap') { const toks = sn.fr.split(' '); const gi = toks.indexOf(sn.gap); toks[gi] = '_____'; return { t: 'gap', label: 'Fill the gap', prompt: sn.en, say: '', answer: sn.gap, gapSentence: toks.join(' '), options: shuffle([sn.gap].concat(sn.wrong)), sn }; }
+  return { t: 'dictate', label: 'Dictation: write it', prompt: '', say: sn.fr, answer: sn.fr, sn };
+};
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    let done = {};
+    try { done = JSON.parse(localStorage.getItem('allez_sent_v1') || '{}') || {}; } catch (e) { done = {}; }
+    this.state = { screen: 'home', lv: 0, done, sess: null, pick: null, built: [], typed: '', checked: false, correct: false, almost: false, reveal: false };
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.done !== this.state.done) { try { localStorage.setItem('allez_sent_v1', JSON.stringify(this.state.done)); } catch (e) {} }
+  }
+  flushTime() {
+    if (!(this._pend > 0)) return; const add = this._pend; this._pend = 0;
+    try {
+      const o = JSON.parse(localStorage.getItem('allez_time_v1') || '{}') || {}; o.d = o.d || {}; const t = new Date();
+      const k = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
+      o.d[k] = (o.d[k] || 0) + add; localStorage.setItem('allez_time_v1', JSON.stringify(o));
+    } catch (e) {}
+  }
+  componentDidMount() {
+    this._act = Date.now(); this._pend = 0; this._mark = () => { this._act = Date.now(); };
+    try { ['pointerdown', 'touchstart', 'input'].forEach((e) => document.addEventListener(e, this._mark, true)); document.addEventListener('scroll', this._mark, true); } catch (e) {}
+    this._iv = setInterval(() => {
+      let vis = true; try { vis = document.visibilityState !== 'hidden'; } catch (e) {}
+      if (vis && Date.now() - this._act < 60000) this._pend += 1;
+      if (this._pend >= 5) this.flushTime();
+    }, 1000);
+  }
+  componentWillUnmount() {
+    try { if (canSpeak()) speechSynthesis.cancel(); } catch (e) {}
+    try { clearInterval(this._iv); this.flushTime(); ['pointerdown', 'touchstart', 'input'].forEach((e) => document.removeEventListener(e, this._mark, true)); document.removeEventListener('scroll', this._mark, true); } catch (e) {}
+  }
+  renderVals() {
+    const s = this.state; const L = LEVELS[s.lv];
+    const reset = { pick: null, built: [], typed: '', checked: false, correct: false, almost: false, reveal: false };
+    const goHome = () => { try { if (canSpeak()) speechSynthesis.cancel(); } catch (e) {} this.setState({ screen: 'home', sess: null }); };
+    const nDone = Object.keys(s.done).length;
+    const levels = LEVELS.map((l, i) => {
+      const d = s.done[i] !== undefined;
+      return { n: i + 1, title: l.title, sub: l.s.length + ' sentences', tag: d ? 'Cleared' : 'Play', tagColor: d ? '#7FE0A8' : '#C6F36B', border: d ? '#7FE0A8' : '#172A44',
+        badge: 'width:40px;height:40px;border-radius:12px;flex:none;display:flex;align-items:center;justify-content:center;font-family:Fraunces,Georgia,serif;font-weight:700;font-size:18px;background:' + (d ? '#7FE0A8' : '#C6F36B') + ';color:#0E1A2B',
+        open: () => this.setState({ screen: 'intro', lv: i }) };
+    });
+    const preview = L.s.map((sn) => ({ fr: sn.fr, en: sn.en, say: () => speak(sn.fr) }));
+    const tips = L.tips.map((t) => ({ title: t[0], body: t[1] }));
+    const startLevel = () => {
+      const st = LEVELS[this.state.lv].s;
+      let items = st.map((sn) => mk(sn, 'build'))
+        .concat(st.filter((sn) => sn.gap).map((sn) => mk(sn, 'gap')))
+        .concat(canSpeak() ? shuffle(st).slice(0, 4).map((sn) => mk(sn, 'hear')).concat(shuffle(st).slice(0, 3).map((sn) => mk(sn, 'dictate'))) : []);
+      items = shuffle(items);
+      this.setState(Object.assign({ screen: 'play', sess: { queue: items, total: items.length, wrong: 0 } }, reset));
+    };
+    const sess = s.sess;
+    const ex = sess && sess.queue.length ? sess.queue[0] : { t: 'build', label: '', prompt: '', say: '', answer: '', tiles: [], options: [], gapSentence: '', sn: { fr: '', en: '' } };
+    const isBuild = ex.t === 'build' || ex.t === 'hear';
+    const tileBase = 'min-height:44px;padding:0 16px;border-radius:12px;font-size:17px;font-weight:500;color:#0E1A2B;';
+    const bankTiles = isBuild ? ex.tiles.map((t, i) => {
+      const used = s.built.indexOf(i) >= 0;
+      return { text: t, style: tileBase + 'border:0;border-bottom:3px solid #8A97AD;background:' + (used ? '#172A44' : '#F3F1EA') + ';' + (used ? 'color:#172A44;border-bottom-color:#172A44;' : ''),
+        pick: () => { if (!used && !this.state.checked) this.setState({ built: this.state.built.concat([i]) }); } };
+    }) : [];
+    const builtTiles = isBuild ? s.built.map((ti, pos) => ({ text: ex.tiles[ti],
+      style: tileBase + 'border:0;border-bottom:3px solid ' + (s.checked ? (s.correct ? '#7FE0A8' : '#F28B82') : '#8A97AD') + ';background:#F3F1EA;',
+      remove: () => { if (!this.state.checked) this.setState({ built: this.state.built.filter((_, p) => p !== pos) }); } })) : [];
+    const opts = ex.t === 'gap' ? ex.options.map((t) => {
+      const sel = s.pick === t, isAns = t === ex.answer;
+      let bg = '#172A44', bd = '#3A4F70';
+      if (s.checked) { if (isAns) { bg = '#123D2B'; bd = '#7FE0A8'; } else if (sel) { bg = '#4A1D1D'; bd = '#F28B82'; } }
+      else if (sel) { bg = '#26405F'; bd = '#C6F36B'; }
+      return { text: t, style: 'min-height:56px;padding:10px 14px;border-radius:14px;text-align:left;font-size:18px;font-weight:500;color:#F3F1EA;background:' + bg + ';border:2px solid ' + bd, pick: () => { if (!this.state.checked) this.setState({ pick: t }); } };
+    }) : [];
+    const canCheck = isBuild ? s.built.length > 0 : ex.t === 'dictate' ? s.typed.trim().length > 0 : s.pick !== null;
+    const check = () => {
+      const st = this.state; const e = st.sess.queue[0]; let ok = false, almost = false;
+      if (e.t === 'build' || e.t === 'hear') ok = norm(st.built.map((i) => e.tiles[i]).join(' ')) === norm(e.answer);
+      else if (e.t === 'gap') ok = st.pick === e.answer;
+      else { ok = norm(st.typed) === norm(e.answer); almost = !ok && plain(st.typed) === plain(e.answer); }
+      const ss = Object.assign({}, st.sess); if (!ok) ss.wrong += 1;
+      this.setState({ checked: true, correct: ok, almost, sess: ss });
+      speak(e.sn.fr);
+    };
+    const next = () => {
+      const st = this.state; const ss = Object.assign({}, st.sess); const e = ss.queue[0];
+      ss.queue = ss.queue.slice(1); if (!st.correct) ss.queue = ss.queue.concat([e]);
+      if (ss.queue.length === 0) { const done = Object.assign({}, st.done, { [st.lv]: Math.min(ss.wrong, st.done[st.lv] === undefined ? 999 : st.done[st.lv]) }); this.setState(Object.assign({ screen: 'result', sess: ss, done }, reset)); return; }
+      this.setState(Object.assign({ sess: ss }, reset));
+      const ne = ss.queue[0]; if (ne.say) setTimeout(() => speak(ne.say), 250);
+    };
+    const ok = s.correct;
+    const progressed = sess ? sess.total - new Set(sess.queue).size : 0;
+    const ansShow = ex.t === 'gap' ? ex.sn.fr : ex.answer;
+    const nextIdx = s.lv + 1;
+    return {
+      isHome: s.screen === 'home', isIntro: s.screen === 'intro', isPlay: s.screen === 'play', isResult: s.screen === 'result',
+      nDone, nSent: LEVELS.reduce((a, l) => a + l.s.length, 0), levels, goHome,
+      lvN: s.lv + 1, lvTitle: L.title, tips, preview, startLevel,
+      quit: goHome, ex, bar: 'height:100%;border-radius:999px;background:#C6F36B;width:' + (sess ? Math.round((progressed / sess.total) * 100) : 0) + '%;transition:width .3s',
+      pos: sess ? Math.min(progressed + 1, sess.total) + '/' + sess.total : '',
+      showText: ex.t === 'build' || ex.t === 'gap', promptText: ex.prompt, hearOnly: ex.t === 'hear' || ex.t === 'dictate', hasSpeaker: ex.t === 'hear' || ex.t === 'dictate',
+      replay: () => speak(ex.say), toggleReveal: () => this.setState({ reveal: !this.state.reveal }), revealLabel: s.reveal ? 'Hide the text' : 'Can’t hear it? Show the text', revealText: s.reveal ? ex.say : '',
+      isBuild, bankTiles, builtTiles, isGap: ex.t === 'gap', gapSentence: ex.gapSentence, opts, isType: ex.t === 'dictate',
+      typed: s.typed, onType: (e) => this.setState({ typed: e.target.value }),
+      accents: ACCENTS.map((ch) => ({ ch, add: () => { if (!this.state.checked) this.setState({ typed: this.state.typed + ch }); } })),
+      inputStyle: 'min-height:56px;box-sizing:border-box;width:100%;border-radius:14px;padding:0 16px;font-size:19px;font-family:inherit;color:#F3F1EA;background:#172A44;border:2px solid ' + (s.checked ? (ok ? '#7FE0A8' : '#F28B82') : '#3A4F70'),
+      checked: s.checked, notChecked: !s.checked, cantCheck: !canCheck, check, next,
+      fbStyle: 'padding:16px 24px 32px;display:flex;flex-direction:column;gap:10px;min-height:112px;box-sizing:border-box;justify-content:center;background:' + (!s.checked ? 'transparent' : ok ? '#123D2B' : '#4A1D1D') + ';color:' + (!s.checked ? '#F3F1EA' : ok ? '#D8F7E6' : '#FFE1DE'),
+      fbTitle: ok ? 'Bien joué!' : s.almost ? 'Almost! Mind the accents.' : 'Not quite.', fbSub: ok ? ex.sn.fr + ' = ' + ex.sn.en : 'Answer: ' + ansShow + ' (' + ex.sn.en + ')',
+      checkBtn: 'border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px;background:' + (canCheck ? '#C6F36B' : '#26405F') + ';color:' + (canCheck ? '#0E1A2B' : '#A9B4C6'),
+      nextBtn: 'border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px;color:#0E1A2B;background:' + (ok ? '#7FE0A8' : '#F28B82'),
+      resTotal: sess ? sess.total : 0, resMistakes: sess ? sess.wrong : 0,
+      resultText: sess && sess.wrong === 0 ? 'Perfect run, no mistakes.' : 'Sentences you missed came back until you got them right.',
+      nextLabel: nextIdx < LEVELS.length ? 'Next level: ' + LEVELS[nextIdx].title : 'Play this level again',
+      nextLevel: () => { if (nextIdx < LEVELS.length) this.setState({ screen: 'intro', lv: nextIdx, sess: null }); else this.setState({ screen: 'intro', sess: null }); }
+    };
+  }
+}
+</script>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});</script>
+</body>
+</html>

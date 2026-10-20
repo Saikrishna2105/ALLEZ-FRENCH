@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sound test</title>
+<style>body{font-family:system-ui,sans-serif;margin:0;padding:20px;background:#F7F4EE;color:#14213D}
+button{display:block;width:100%;min-height:52px;margin:10px 0;font-size:17px;font-weight:700;border:0;border-radius:14px;background:#14213D;color:#fff}
+pre{white-space:pre-wrap;background:#fff;border-radius:12px;padding:12px;font-size:14px}</style></head><body>
+<h2>Sound test</h2>
+<p>Raise the media volume, then tap the buttons in order and send me the text below.</p>
+<button id="b1">1. Say "Bonjour" (phone voice)</button>
+<button id="b2">2. Play a beep (checks speaker)</button>
+<button id="b3">3. Say "Bonjour" (online voice)</button>
+<pre id="o">Loading…</pre>
+<script>
+var o=document.getElementById('o'),log=[];
+function L(m){log.push(m);o.textContent=log.join('\n');}
+L('Browser: '+navigator.userAgent);
+L('Page: '+location.href);
+L('speechSynthesis supported: '+('speechSynthesis' in window));
+function vs(){try{var v=speechSynthesis.getVoices();L('Voices found: '+v.length+(v.length?' | French: '+v.filter(function(x){return /^fr/i.test(String(x.lang).replace('_','-'))}).map(function(x){return x.name+' ('+x.lang+')'}).join(', '):''));}catch(e){L('getVoices error: '+e);}}
+setTimeout(vs,500);setTimeout(vs,2500);
+document.getElementById('b1').onclick=function(){try{var u=new SpeechSynthesisUtterance('Bonjour, ça va ?');u.lang='fr-FR';
+u.onstart=function(){L('1: started')};u.onend=function(){L('1: ended')};u.onerror=function(e){L('1: ERROR '+e.error)};
+window._u=u;speechSynthesis.cancel();speechSynthesis.speak(u);L('1: requested');setTimeout(function(){L('1: speaking='+speechSynthesis.speaking+' pending='+speechSynthesis.pending)},1500);}catch(e){L('1: exception '+e)}};
+document.getElementById('b2').onclick=function(){try{var c=new (window.AudioContext||window.webkitAudioContext)();var s=c.createOscillator();s.connect(c.destination);s.frequency.value=600;s.start();setTimeout(function(){s.stop();L('2: beep done')},600);L('2: beep playing');}catch(e){L('2: exception '+e)}};
+document.getElementById('b3').onclick=function(){try{var a=new Audio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=fr&q=Bonjour');
+a.onplaying=function(){L('3: playing')};a.onended=function(){L('3: ended')};a.onerror=function(){L('3: ERROR (blocked or offline)')};
+var p=a.play();if(p&&p.catch)p.catch(function(e){L('3: play rejected '+e)});L('3: requested');}catch(e){L('3: exception '+e)}};
+</script></body></html>

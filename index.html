@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>French A1 Vocabulary</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F7F4EE">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>html,body{margin:0;height:100%;background:#F7F4EE}</style>
+<script src="dc.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #2F5BEA;outline-offset:2px}
+button:disabled{cursor:default}
+</style>
+</helmet>
+<div style="width:100%;max-width:520px;margin:0 auto;height:100vh;height:100dvh;box-sizing:border-box;display:flex;flex-direction:column;background:#F7F4EE;color:#14213D;font-family:'DM Sans',system-ui,sans-serif;overflow:hidden;position:relative">
+
+<!-- LEARNING TIMER (only while learning) -->
+<sc-if value="{{showTimer}}" hint-placeholder-val="{{ false }}">
+<button onClick="{{openStats}}" aria-label="Open study log. {{timerText}}" style="position:absolute;top:10px;right:12px;z-index:5;min-height:36px;border:0;background:#14213D;color:#F7F4EE;font-size:14px;font-weight:700;line-height:1;padding:0 14px;border-radius:999px;font-variant-numeric:tabular-nums;box-shadow:0 1px 4px rgba(20,33,61,0.25)">{{timerText}}</button>
+</sc-if>
+
+<!-- HOME -->
+<sc-if value="{{isHome}}" hint-placeholder-val="{{ true }}">
+<div style="flex:1;min-height:0;overflow-y:auto;padding:56px 24px 40px;display:flex;flex-direction:column;gap:16px">
+<div>
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:30px;letter-spacing:-0.5px">French A1 vocabulary</div>
+<div style="font-size:14px;color:#5B6478;margin-top:4px">631 entries: 513 words in 15 topics, plus 118 verbs with all their forms.</div>
+</div>
+
+<a href="sentences.html" style="display:flex;align-items:center;gap:12px;background:#14213D;color:#F7F4EE;border-radius:18px;padding:16px;text-decoration:none;min-height:44px">
+<span style="flex:1"><span style="display:block;font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:19px">Sentence Lab</span><span style="display:block;font-size:13px;opacity:0.85;margin-top:2px">Build full sentences. A separate chapter.</span></span>
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F7F4EE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+</a>
+
+<button onClick="{{openStats}}" style="align-self:flex-end;min-height:44px;border:0;background:transparent;color:#1E3FAE;font-weight:700;font-size:14px;padding:0 2px">Study log ›</button>
+
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+<div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Mastered</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{nMastered}}</div><div style="font-size:12px;color:#5B6478">of 631</div></div>
+<div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Due today</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{nDue}}</div><div style="font-size:12px;color:#5B6478">to review</div></div>
+<div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Mistakes</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{nWeak}}</div><div style="font-size:12px;color:#5B6478">to fix</div></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<button onClick="{{reviewDue}}" disabled="{{noDue}}" style="{{dueBtn}}">Review the words due today</button>
+<div style="display:flex;gap:8px">
+<button onClick="{{fixWeak}}" disabled="{{noWeak}}" style="{{weakBtn}}">Fix my mistakes</button>
+<button onClick="{{quizAll}}" style="flex:1;min-height:48px;border-radius:14px;font-weight:700;font-size:15px;background:transparent;color:#14213D;border:1.5px solid #14213D">Quiz everything</button>
+</div>
+</div>
+
+<div>
+<input type="text" value="{{query}}" onChange="{{onSearch}}" aria-label="Search words" placeholder="Search a French or English word" autocomplete="off" style="width:100%;box-sizing:border-box;min-height:48px;border-radius:14px;border:1.5px solid #D9D4C7;background:#fff;padding:0 14px;font-size:16px;font-family:inherit;color:#14213D">
+</div>
+
+<sc-if value="{{hasQuery}}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border:1.5px solid #D9D4C7;border-radius:16px;overflow:hidden;flex:none">
+<sc-for list="{{results}}" as="r" hint-placeholder-count="5">
+<div style="display:flex;align-items:center;gap:8px;padding:4px 8px 4px 14px;border-bottom:1px solid #EFEBE0">
+<span style="flex:1;font-weight:700;font-size:15px;line-height:1.3">{{r.fr}}</span>
+<span style="flex:1;font-size:14px;color:#3B4560">{{r.en}}</span>
+<button onClick="{{r.say}}" aria-label="Hear it" style="width:44px;height:44px;border:0;background:transparent;border-radius:12px;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14213D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+</div>
+</sc-for>
+<sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}"><div style="padding:14px;font-size:14px;color:#5B6478">No word matches that.</div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{noQuery}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:13px;font-weight:700;color:#5B6478">Topics</div>
+<sc-for list="{{topics}}" as="t" hint-placeholder-count="16">
+<button onClick="{{t.open}}" style="display:flex;flex-direction:column;gap:8px;text-align:left;background:#fff;border:1.5px solid #D9D4C7;border-radius:16px;padding:12px 14px;color:#14213D;width:100%">
+<span style="display:flex;align-items:center;gap:10px;width:100%">
+<span style="width:32px;height:32px;border-radius:50%;background:#14213D;color:#F7F4EE;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex:none">{{t.n}}</span>
+<span style="flex:1;font-weight:700;font-size:16px;line-height:1.2">{{t.title}}</span>
+<span style="font-size:13px;color:#5B6478;font-weight:500">{{t.prog}}</span>
+</span>
+<span style="display:block;height:6px;background:#E4DFD2;border-radius:999px;overflow:hidden;width:100%"><span style="{{t.bar}}"></span></span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- TOPIC -->
+<sc-if value="{{isTopic}}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column">
+<div style="padding:52px 16px 4px;display:flex;align-items:center;gap:4px">
+<button onClick="{{backHome}}" aria-label="Back to topics" style="width:44px;height:44px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#14213D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+<div style="flex:1;min-width:0">
+<div style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#5B6478">Topic {{curN}} · {{curCount}} {{curUnit}}</div>
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:21px;line-height:1.15">{{curTitle}}</div>
+</div>
+</div>
+<div style="padding:8px 20px;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid #D9D4C7">
+<div style="display:flex;gap:8px">
+<button onClick="{{togglePlay}}" style="{{playStyle}}">{{playLabel}}</button>
+<button onClick="{{toggleSpeed}}" style="{{chipStyle}}">{{speedLabel}}</button>
+<button onClick="{{toggleEn}}" aria-pressed="{{enPressed}}" style="{{enChipStyle}}">+ English</button>
+</div>
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-size:13px;font-weight:700;color:#5B6478">Cover:</span>
+<sc-for list="{{covers}}" as="c" hint-placeholder-count="3">
+<button onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="{{c.style}}">{{c.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:0 12px 100px 12px">
+<sc-if value="{{isVerbTopic}}" hint-placeholder-val="{{ false }}">
+<div style="margin:10px 4px 6px;background:#FFF4D6;border:1px solid #E8B23A;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45">These are the forms you actually say. <b>il</b> also means elle and on (on = we, same form as il). <b>ils</b> also means elles. Regular -er verbs (parler, manger, habiter…) all follow the same pattern. Learn the whole row. Tap any form to hear it.</div>
+</sc-if>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+<div id="{{r.domId}}" style="{{r.style}}">
+<sc-if value="{{r.isWord}}" hint-placeholder-val="{{ true }}">
+<span style="width:26px;font-size:12px;color:#5B6478;text-align:center;flex:none">{{r.n}}</span>
+<button onClick="{{r.reveal}}" style="flex:1;min-width:0;min-height:52px;border:0;background:transparent;text-align:left;padding:4px 6px;color:#14213D;display:flex;flex-direction:column;justify-content:center;gap:1px">
+<span style="font-weight:700;font-size:17px;line-height:1.2">{{r.fr}}</span>
+<span style="font-size:14px;color:#3B4560;line-height:1.25">{{r.en}}</span>
+</button>
+<button onClick="{{r.say}}" aria-label="Hear {{r.plain}}" style="width:44px;height:44px;border:0;background:transparent;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14213D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+<button onClick="{{r.tick}}" role="checkbox" aria-checked="{{r.tickAria}}" aria-label="Mastered {{r.plain}}" style="{{r.tickStyle}}">
+<sc-if value="{{r.ticked}}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></sc-if>
+</button>
+</sc-if>
+<sc-if value="{{r.isVerb}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:2px">
+<span style="width:26px;font-size:12px;color:#5B6478;text-align:center;flex:none">{{r.n}}</span>
+<button onClick="{{r.reveal}}" style="flex:1;min-width:0;min-height:44px;border:0;background:transparent;text-align:left;padding:4px 6px;color:#14213D;font-weight:700;font-size:18px">{{r.en}}</button>
+<button onClick="{{r.say}}" aria-label="Hear the whole row of {{r.plain}}" style="width:44px;height:44px;border:0;background:transparent;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14213D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+<button onClick="{{r.tick}}" role="checkbox" aria-checked="{{r.tickAria}}" aria-label="Mastered {{r.plain}}" style="{{r.tickStyle}}">
+<sc-if value="{{r.ticked}}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></sc-if>
+</button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,auto);grid-auto-flow:column;gap:6px;padding:0 6px 10px 32px">
+<sc-for list="{{r.forms}}" as="f" hint-placeholder-count="6">
+<button onClick="{{f.say}}" disabled="{{f.none}}" style="{{f.style}}"><span style="display:block;font-weight:700;font-size:15px;line-height:1.2">{{f.text}}</span><span style="display:block;font-size:12.5px;color:#3B4560;line-height:1.25;margin-top:2px">{{f.sub}}</span></button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<div style="position:absolute;left:0;right:0;bottom:0;padding:12px 20px 28px;background:linear-gradient(to top,#F7F4EE 70%,rgba(247,244,238,0))">
+<button onClick="{{quizTopic}}" style="width:100%;background:#2F5BEA;color:#fff;border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px">Quiz this topic</button>
+</div>
+</div>
+</sc-if>
+
+<!-- STATS -->
+<sc-if value="{{isStats}}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column">
+<div style="padding:52px 16px 4px;display:flex;align-items:center;gap:4px">
+<button onClick="{{backHome}}" aria-label="Back" style="width:44px;height:44px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#14213D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:24px">Study log</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:8px 24px 40px;display:flex;flex-direction:column;gap:18px">
+<div style="background:#14213D;color:#F7F4EE;border-radius:20px;padding:20px">
+<div style="font-size:13px;opacity:0.8">Time studied today</div>
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:44px;line-height:1.05;margin-top:4px">{{todayFmt}}</div>
+<div style="height:10px;background:rgba(247,244,238,0.25);border-radius:999px;overflow:hidden;margin-top:12px"><div style="{{goalBarDark}}"></div></div>
+<div style="font-size:13px;margin-top:8px;opacity:0.9">{{goalLine}}</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Streak</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{streak}} <span style="font-size:14px;color:#5B6478">days</span></div></div>
+<div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Course day</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{courseDay}}</div></div>
+<div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Days studied</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{daysStudied}}</div></div>
+<div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Last 7 days</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{weekFmt}}</div></div>
+</div>
+
+<div>
+<div style="font-size:13px;font-weight:700;color:#5B6478;margin-bottom:8px">Last 14 days (minutes)</div>
+<div style="background:#fff;border:1.5px solid #D9D4C7;border-radius:16px;padding:14px 10px 8px;position:relative">
+<div style="position:relative;height:120px;display:flex;align-items:flex-end;gap:4px">
+<div style="{{goalLineStyle}}"></div>
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="14">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%" aria-label="{{b.aria}}">
+<div style="font-size:10px;color:#3B4560;margin-bottom:2px">{{b.val}}</div>
+<div style="{{b.style}}"></div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;gap:4px;margin-top:6px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="14">
+<div style="flex:1;text-align:center;font-size:11px;color:#5B6478;font-weight:700">{{b.day}}</div>
+</sc-for>
+</div>
+</div>
+<div style="font-size:12px;color:#5B6478;margin-top:6px">The dashed line is your daily goal. A day counts as studied from 1 minute.</div>
+</div>
+
+<div>
+<div style="font-size:13px;font-weight:700;color:#5B6478;margin-bottom:8px">Daily goal</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{goalChips}}" as="g" hint-placeholder-count="6">
+<button onClick="{{g.pick}}" aria-pressed="{{g.pressed}}" style="{{g.style}}">{{g.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<div>
+<div style="font-size:13px;font-weight:700;color:#5B6478;margin-bottom:8px">Studied away from the app? Log it</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{logChips}}" as="g" hint-placeholder-count="4">
+<button onClick="{{g.pick}}" style="min-height:48px;flex:1;border-radius:12px;font-weight:700;font-size:15px;background:#fff;color:#14213D;border:1.5px solid #14213D">{{g.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #D9D4C7;border-radius:16px;padding:14px">
+<div style="font-weight:700;font-size:15px">Whole course: {{totalFmt}} of 90 to 100 h</div>
+<div style="height:8px;background:#E4DFD2;border-radius:999px;overflow:hidden;margin-top:8px"><div style="{{courseBar}}"></div></div>
+<div style="font-size:12px;color:#5B6478;margin-top:8px;line-height:1.4">The 90 to 100 hour range for A1 comes from CCFS Sorbonne, as quoted in your course plan. It covers the whole course, not only this app. The app counts time while you tap, type or listen, and stops after 1 minute without activity.</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- SETUP -->
+<sc-if value="{{isSetup}}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column">
+<div style="padding:52px 16px 4px;display:flex;align-items:center;gap:4px">
+<button onClick="{{setupBack}}" aria-label="Back" style="width:44px;height:44px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#14213D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:24px">Set up your quiz</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:8px 24px 16px;display:flex;flex-direction:column;gap:18px">
+<div style="background:#fff;border:1.5px solid #D9D4C7;border-radius:14px;padding:12px 14px"><div style="font-size:12px;font-weight:700;color:#5B6478">Words</div><div style="font-weight:700;font-size:16px">{{poolLabel}}</div></div>
+<div>
+<div style="font-size:13px;font-weight:700;color:#5B6478;margin-bottom:8px">The question comes as</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{qModes}}" as="c" hint-placeholder-count="5">
+<button onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="{{c.style}}"><span style="font-weight:700">{{c.label}}</span><span style="font-size:13px;opacity:0.85">{{c.sub}}</span></button>
+</sc-for>
+</div>
+</div>
+<div>
+<div style="font-size:13px;font-weight:700;color:#5B6478;margin-bottom:8px">You answer by</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{aModes}}" as="c" hint-placeholder-count="4">
+<button onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="{{c.style}}"><span style="font-weight:700">{{c.label}}</span><span style="font-size:13px;opacity:0.85">{{c.sub}}</span></button>
+</sc-for>
+</div>
+<div style="font-size:12px;color:#5B6478;margin-top:8px;line-height:1.4">Sound and speaking answers only apply when the answer is French. Otherwise the app falls back to picking text. Entries with “…” in them are always picked, never typed. For verbs, each question asks for one form, for example “to go · nous”.</div>
+</div>
+<div>
+<div style="font-size:13px;font-weight:700;color:#5B6478;margin-bottom:8px">Number of questions</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{lens}}" as="c" hint-placeholder-count="3">
+<button onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="{{c.style}}">{{c.label}}</button>
+</sc-for>
+</div>
+</div>
+<sc-if value="{{noSpeech}}" hint-placeholder-val="{{ false }}"><div style="background:#FFF4D6;border:1px solid #E8B23A;border-radius:12px;padding:10px 12px;font-size:13px">This browser has no speech voice, so voice questions are switched off.</div></sc-if>
+</div>
+<div style="padding:12px 24px 32px"><button onClick="{{startQuiz}}" style="width:100%;background:#2F5BEA;color:#fff;border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px">Start</button></div>
+</div>
+</sc-if>
+
+<!-- PLAY -->
+<sc-if value="{{isPlay}}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column">
+<div style="padding:52px 20px 8px;display:flex;align-items:center;gap:12px">
+<button onClick="{{quitQuiz}}" aria-label="Quit quiz" style="width:44px;height:44px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#14213D" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+<div style="flex:1;height:12px;background:#E4DFD2;border-radius:999px;overflow:hidden"><div style="{{bar}}"></div></div>
+<div style="font-size:14px;font-weight:700;min-width:46px;text-align:right">{{pos}}</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:12px 24px;display:flex;flex-direction:column;gap:16px">
+<div>
+<div style="font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#5B6478">{{qLabel}}</div>
+<div style="display:flex;align-items:center;gap:10px;margin-top:8px;min-height:60px">
+<sc-if value="{{showPrompt}}" hint-placeholder-val="{{ true }}"><div style="flex:1;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:{{promptSize}}px;line-height:1.15">{{promptText}}</div></sc-if>
+<sc-if value="{{voiceQ}}" hint-placeholder-val="{{ false }}"><div style="flex:1;font-size:15px;color:#5B6478">Tap the speaker to hear it again.</div></sc-if>
+<sc-if value="{{hasSpeaker}}" hint-placeholder-val="{{ true }}">
+<button onClick="{{replay}}" aria-label="Hear it" style="width:56px;height:56px;flex:none;border:2px solid #14213D;background:#fff;border-radius:16px;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#14213D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+</sc-if>
+</div>
+</div>
+
+<sc-if value="{{isPick}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{opts}}" as="o" hint-placeholder-count="4">
+<button onClick="{{o.pick}}" style="{{o.style}}"><span style="width:28px;height:28px;border-radius:8px;border:1.5px solid #14213D;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:none">{{o.key}}</span><span style="flex:1">{{o.text}}</span></button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{isSound}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;color:#5B6478">Tap an option to hear it. The last one you tap is your answer.</div>
+<sc-for list="{{opts}}" as="o" hint-placeholder-count="4">
+<button onClick="{{o.pick}}" style="{{o.style}}"><span style="width:28px;height:28px;border-radius:8px;border:1.5px solid #14213D;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:none">{{o.key}}</span><span style="flex:1">{{o.soundLabel}}</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#14213D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{isType}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<input type="text" value="{{typed}}" onChange="{{onType}}" disabled="{{checked}}" aria-label="Your answer" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="{{typePlaceholder}}" style="{{inputStyle}}">
+<sc-if value="{{showAccents}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{accents}}" as="a" hint-placeholder-count="12">
+<button onClick="{{a.add}}" aria-label="Add {{a.ch}}" style="min-width:44px;min-height:44px;border:1.5px solid #D9D4C7;background:#fff;border-radius:10px;font-size:18px;color:#14213D">{{a.ch}}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{isSpeak}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+<button onClick="{{toggleMic}}" disabled="{{checked}}" style="{{micStyle}}">{{micLabel}}</button>
+<div style="font-size:15px;min-height:22px">{{heardText}}</div>
+<button onClick="{{typeInstead}}" style="border:0;background:transparent;color:#1E3FAE;font-weight:700;font-size:14px;min-height:44px;padding:0">Mic not working? Type it instead</button>
+</div>
+</sc-if>
+</div>
+
+<div style="{{fbStyle}}">
+<sc-if value="{{checked}}" hint-placeholder-val="{{ false }}"><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:20px;line-height:1.2">{{fbTitle}}</div><div style="font-size:14px">{{fbSub}}</div></sc-if>
+<sc-if value="{{notChecked}}" hint-placeholder-val="{{ true }}"><button onClick="{{check}}" disabled="{{cantCheck}}" style="{{checkBtn}}">Check</button></sc-if>
+<sc-if value="{{checked}}" hint-placeholder-val="{{ false }}"><button onClick="{{next}}" style="{{nextBtn}}">Continue</button></sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- RESULT -->
+<sc-if value="{{isResult}}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column">
+<div style="flex:1;min-height:0;overflow-y:auto;padding:72px 24px 12px;display:flex;flex-direction:column;gap:18px">
+<div>
+<div style="font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#5B6478">Quiz finished</div>
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:44px;line-height:1.05;margin-top:6px">{{score}}</div>
+<div style="font-size:16px;color:#5B6478;margin-top:8px">{{scoreText}}</div>
+</div>
+<sc-if value="{{hasMissed}}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="font-size:13px;font-weight:700;color:#5B6478;margin-bottom:8px">Entries to look at again</div>
+<div style="background:#fff;border:1.5px solid #D9D4C7;border-radius:16px;overflow:hidden;flex:none">
+<sc-for list="{{missed}}" as="r" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:8px;padding:4px 8px 4px 14px;border-bottom:1px solid #EFEBE0">
+<span style="flex:1;font-weight:700;font-size:15px;line-height:1.3">{{r.fr}}</span>
+<span style="flex:1;font-size:14px;color:#3B4560">{{r.en}}</span>
+<button onClick="{{r.say}}" aria-label="Hear it" style="width:44px;height:44px;border:0;background:transparent;border-radius:12px;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14213D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+</div>
+<div style="padding:12px 24px 32px;display:flex;flex-direction:column;gap:10px">
+<sc-if value="{{hasMissed}}" hint-placeholder-val="{{ false }}"><button onClick="{{retryMissed}}" style="background:#2F5BEA;color:#fff;border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px">Retry the missed ones</button></sc-if>
+<button onClick="{{backHome}}" style="background:transparent;color:#14213D;border:1.5px solid #14213D;border-radius:14px;min-height:52px;font-weight:700;font-size:16px">Back to topics</button>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#2F5BEA","options":["#2F5BEA","#1F7A4D","#B3261E","#14213D"]},"$preview":{"width":390,"height":844}}'>
+const INK = '#14213D';
+const RAW = [
+['Greetings and polite phrases', `bonjour=hello / good morning|bonsoir=good evening|salut=hi (informal)|au revoir=goodbye|à bientôt=see you soon|bonne nuit=good night|merci=thank you|de rien=you're welcome|s'il vous plaît=please (formal)|s'il te plaît=please (informal)|excusez-moi=excuse me|pardon=sorry|enchanté(e)=pleased to meet you|Comment ça va ?=how are you?|Ça va bien=I'm fine|Je m'appelle…=my name is…|Comment tu t'appelles ?=what's your name?|J'ai … ans=I am … years old|J'habite à…=I live in…|Je viens de…=I come from…|oui=yes|non=no|d'accord=OK / agreed|Je comprends=I understand|Je ne comprends pas=I don't understand|Je ne sais pas=I don't know|Répétez, s'il vous plaît=please repeat|Parlez plus lentement=speak more slowly|Je voudrais…=I would like…|C'est combien ?=how much is it?|Où est… ?=where is…?|Il y a…=there is / there are|Bon appétit=enjoy your meal|Bonne journée=have a good day|Félicitations=congratulations`],
+['Days, months and time', `lundi=Monday|mardi=Tuesday|mercredi=Wednesday|jeudi=Thursday|vendredi=Friday|samedi=Saturday|dimanche=Sunday|janvier=January|février=February|mars=March|avril=April|mai=May|juin=June|juillet=July|août=August|septembre=September|octobre=October|novembre=November|décembre=December|le jour=day|la semaine=week|le mois=month|l'année (f.)=year|l'heure (f.)=hour / time|la minute=minute|le matin=morning|l'après-midi (m.)=afternoon|le soir=evening|la nuit=night|aujourd'hui=today|demain=tomorrow|hier=yesterday|maintenant=now|toujours=always|souvent=often|parfois=sometimes|jamais=never|tôt=early|tard=late`],
+['Family and people', `la famille=family|les parents=parents|le père=father|la mère=mother|le frère=brother|la sœur=sister|le fils=son|la fille=daughter / girl|le mari=husband|la femme=wife / woman|le grand-père=grandfather|la grand-mère=grandmother|l'oncle (m.)=uncle|la tante=aunt|le cousin / la cousine=cousin|l'ami(e)=friend|le garçon=boy|l'homme (m.)=man|l'enfant (m./f.)=child|le bébé=baby|le voisin / la voisine=neighbour|célibataire=single|marié(e)=married|Monsieur=Mr / sir|Madame=Mrs / madam`],
+['Colours and descriptions', `blanc / blanche=white|noir(e)=black|rouge=red|bleu(e)=blue|vert(e)=green|jaune=yellow|orange=orange (colour and fruit: l'orange)|gris(e)=grey|marron=brown|rose=pink|violet(te)=purple|grand(e)=big / tall|petit(e)=small / short|jeune=young|vieux / vieille=old|beau / belle=beautiful|joli(e)=pretty|gentil(le)=kind|sympa=nice|intelligent(e)=intelligent|timide=shy|content(e)=happy|triste=sad|fatigué(e)=tired|malade=ill|nouveau / nouvelle=new|bon(ne)=good|mauvais(e)=bad|facile=easy|difficile=difficult|cher / chère=expensive|chaud(e)=hot|froid(e)=cold|propre=clean|sale=dirty|court(e)=short|long(ue)=long|ouvert(e)=open|fermé(e)=closed|prêt(e)=ready`],
+['Food and drink', `le pain=bread|la baguette=baguette|le croissant=croissant|le beurre=butter|le fromage=cheese|l'œuf (m.)=egg|le lait=milk|le sucre=sugar|le sel=salt|le poivre=pepper|la viande=meat|le poulet=chicken|le poisson=fish|le jambon=ham|le riz=rice|les pâtes (f.)=pasta|la soupe=soup|la salade=salad|les légumes (m.)=vegetables|les fruits (m.)=fruit|la pomme=apple|la banane=banana|la fraise=strawberry|la tomate=tomato|la carotte=carrot|la pomme de terre=potato|le gâteau=cake|le dessert=dessert|le chocolat=chocolate|la glace=ice cream|l'eau (f.)=water|le café=coffee / café|le thé=tea|le jus=juice|le vin=wine|la bière=beer|le petit déjeuner=breakfast|le déjeuner=lunch|le dîner=dinner|le repas=meal|le menu=menu|l'addition (f.)=the bill|le verre=glass|la tasse=cup|l'assiette (f.)=plate|la fourchette=fork|le couteau=knife|la cuillère=spoon|la bouteille=bottle`],
+['Places and transport', `la ville=city / town|le village=village|la rue=street|la place=square|le quartier=neighbourhood|le marché=market|le magasin=shop|le supermarché=supermarket|la boulangerie=bakery|la pharmacie=pharmacy|la poste=post office|la banque=bank|l'hôpital (m.)=hospital|l'école (f.)=school|l'université (f.)=university|la bibliothèque=library|le cinéma=cinema|le musée=museum|le parc=park|l'église (f.)=church|l'hôtel (m.)=hotel|le restaurant=restaurant|la gare=train station|l'aéroport (m.)=airport|l'arrêt de bus=bus stop|le bus=bus|le métro=metro|le train=train|le tram=tram|l'avion (m.)=plane|la voiture=car|le vélo=bicycle|le taxi=taxi|le billet=ticket|à pied=on foot|tout droit=straight ahead|à gauche=left|à droite=right|près de=near|loin de=far from|en face de=opposite|à côté de=next to|le pays=country|la France=France|Paris=Paris`],
+['Body and health', `la tête=head|les yeux (m.)=eyes|le nez=nose|la bouche=mouth|l'oreille (f.)=ear|les cheveux (m.)=hair|le visage=face|le cou=neck|le bras=arm|la main=hand|le doigt=finger|la jambe=leg|le pied=foot|le dos=back|le ventre=stomach|le cœur=heart|le médecin=doctor|le médicament=medicine|J'ai mal à…=my … hurts|la santé=health`],
+['Clothes', `les vêtements (m.)=clothes|la chemise=shirt|le pantalon=trousers|la robe=dress|la jupe=skirt|le pull=jumper|le manteau=coat|les chaussures (f.)=shoes|le chapeau=hat|le sac=bag|la veste=jacket|le t-shirt=t-shirt|les lunettes (f.)=glasses|la taille=size`],
+['Home and objects', `la maison=house|l'appartement (m.)=flat|la chambre=bedroom|la cuisine=kitchen|la salle de bain=bathroom|le salon=living room|la porte=door|la fenêtre=window|le lit=bed|la table=table|la chaise=chair|le canapé=sofa|l'armoire (f.)=wardrobe|la lampe=lamp|la clé=key|le téléphone=phone|l'ordinateur (m.)=computer|la télévision=television|le livre=book|le cahier=notebook|le stylo=pen|le papier=paper|la photo=photo|l'argent (m.)=money|l'euro (m.)=euro|le cadeau=gift|la chose=thing|la carte=card / map|le journal=newspaper|la lettre=letter`],
+['Work, school and free time', `le travail=work|le métier=job|l'étudiant(e)=student|le professeur=teacher|la classe=class|le cours=lesson|l'examen (m.)=exam|la question=question|la réponse=answer|le mot=word|la phrase=sentence|la langue=language|le français=French|l'anglais (m.)=English|le bureau=office / desk|la réunion=meeting|le sport=sport|le football=football|la musique=music|le film=film|le voyage=trip|les vacances (f.)=holiday|la fête=party|le week-end=weekend|le loisir=hobby`],
+['Weather and nature', `le temps=weather / time|il fait beau=the weather is nice|il fait chaud=it's hot|il fait froid=it's cold|il pleut=it's raining|il neige=it's snowing|le soleil=sun|la pluie=rain|le vent=wind|la neige=snow|l'arbre (m.)=tree|la fleur=flower|la mer=sea|la montagne=mountain|le chien=dog|le chat=cat|l'oiseau (m.)=bird|le printemps=spring|l'été (m.)=summer|l'automne (m.)=autumn|l'hiver (m.)=winter`],
+['Question words and small words', `qui=who|que / quoi=what|où=where|quand=when|pourquoi=why|comment=how|combien=how much / many|quel / quelle=which|est-ce que=(question marker)|je=I|tu=you (informal)|il=he|elle=she|on=we / one|nous=we|vous=you (formal / plural)|ils / elles=they|mon / ma / mes=my|ton / ta / tes=your|son / sa / ses=his / her|notre / nos=our|votre / vos=your (formal / plural)|leur / leurs=their|le / la / les=the|un / une / des=a / some|ce / cet / cette / ces=this / that|et=and|ou=or|mais=but|parce que=because|donc=so|avec=with|sans=without|pour=for|dans=in|sur=on|sous=under|devant=in front of|derrière=behind|entre=between|de / du / de la / des=of / from|à / au / aux=to / at|en=in / by|chez=at (someone's) place|très=very|trop=too much|beaucoup=a lot|un peu=a little|assez=enough|plus=more|moins=less|aussi=also|ici=here|là=there|ne … pas=not|tout=all|avant=before|après=after|encore=again / still|déjà=already|bien=well|mal=badly|vite=fast|seulement=only|quelque chose=something|rien=nothing|quelqu'un=someone|alors=so / then|si=if / yes (answering a negative)|comme=like / as|pendant=during|depuis=since / for|vers=towards / around|car=because (written)`],
+['Pronouns and key phrases', `moi=me / I (stressed)|toi=you (stressed)|lui=him / to him / to her|eux=them (m.)|elles (stressed)=them (f.)|me / m'=me (before a verb)|te / t'=you (before a verb)|le / l'=him / it (before a verb)|la (pronoun)=her / it (before a verb)|les (pronoun)=them (before a verb)|ça=that / it|c'est=it is / this is|ce n'est pas=it is not|voici=here is|voilà=there is|y=there (pronoun: Allons-y !)|Et toi ?=and you?|Moi aussi=me too|Moi non plus=me neither|Qu'est-ce que c'est ?=what is it?|Qu'est-ce que tu fais ?=what are you doing?|Pourquoi pas ?=why not?|C'est pour moi=it's for me`],
+['More everyday nouns', `la fois=time (occasion)|la personne=person|les gens (m.)=people|le nom=name / noun|le prénom=first name|l'adresse (f.)=address|le numéro=number|le code postal=postcode|l'idée (f.)=idea|le problème=problem|la vie=life|le monde=world / people|l'histoire (f.)=story / history|l'exemple (m.)=example|le rendez-vous=appointment|la raison=reason|l'ami(e) proche=close friend|le client / la cliente=customer|le prix=price|la monnaie=change (coins)|la carte bancaire=bank card|le sac à dos=backpack|la valise=suitcase|le passeport=passport|la carte d'identité=ID card|l'étage (m.)=floor (of a building)|l'escalier (m.)=stairs|l'ascenseur (m.)=lift|le jardin=garden|la plage=beach|la campagne=countryside|le bruit=noise|la lumière=light (lamp, daylight)`],
+['More adjectives and adverbs', `gros(se)=fat / big|mince=thin|fort(e)=strong|faible=weak|heureux / heureuse=happy|drôle=funny|sérieux / sérieuse=serious|occupé(e)=busy|libre=free|seul(e)=alone|riche=rich|pauvre=poor|rapide=fast|lent(e)=slow|lourd(e)=heavy|léger / légère=light (not heavy)|plein(e)=full|vide=empty|haut(e)=high|bas(se)=low|même=same|autre=other|différent(e)=different|important(e)=important|possible=possible|fatigant(e)=tiring|ensemble=together|ensuite=then|puis=then / next|enfin=finally|d'abord=first (of all)|peut-être=maybe|sûrement=surely|vraiment=really|surtout=especially|environ=about|presque=almost|longtemps=for a long time|bientôt=soon|tout de suite=right away`]
+];
+// Verb table: je | tu | il / elle | nous | vous | ils / elles | English  ("—" = no such form)
+const VERB_ROWS = `je suis|tu es|il est|nous sommes|vous êtes|ils sont|to be
+j'ai|tu as|il a|nous avons|vous avez|ils ont|to have
+je vais|tu vas|il va|nous allons|vous allez|ils vont|to go
+je fais|tu fais|il fait|nous faisons|vous faites|ils font|to do / make
+je viens|tu viens|il vient|nous venons|vous venez|ils viennent|to come
+je peux|tu peux|il peut|nous pouvons|vous pouvez|ils peuvent|to be able to
+je veux|tu veux|il veut|nous voulons|vous voulez|ils veulent|to want
+je dois|tu dois|il doit|nous devons|vous devez|ils doivent|to have to
+je sais|tu sais|il sait|nous savons|vous savez|ils savent|to know (a fact)
+je connais|tu connais|il connaît|nous connaissons|vous connaissez|ils connaissent|to know (a person/place)
+je vois|tu vois|il voit|nous voyons|vous voyez|ils voient|to see
+je dis|tu dis|il dit|nous disons|vous dites|ils disent|to say
+je donne|tu donnes|il donne|nous donnons|vous donnez|ils donnent|to give
+je prends|tu prends|il prend|nous prenons|vous prenez|ils prennent|to take
+je mets|tu mets|il met|nous mettons|vous mettez|ils mettent|to put
+je pars|tu pars|il part|nous partons|vous partez|ils partent|to leave
+je sors|tu sors|il sort|nous sortons|vous sortez|ils sortent|to go out
+j'entre|tu entres|il entre|nous entrons|vous entrez|ils entrent|to enter
+j'arrive|tu arrives|il arrive|nous arrivons|vous arrivez|ils arrivent|to arrive
+je reste|tu restes|il reste|nous restons|vous restez|ils restent|to stay
+je parle|tu parles|il parle|nous parlons|vous parlez|ils parlent|to speak
+j'écoute|tu écoutes|il écoute|nous écoutons|vous écoutez|ils écoutent|to listen
+je regarde|tu regardes|il regarde|nous regardons|vous regardez|ils regardent|to watch / look
+j'entends|tu entends|il entend|nous entendons|vous entendez|ils entendent|to hear
+je comprends|tu comprends|il comprend|nous comprenons|vous comprenez|ils comprennent|to understand
+j'apprends|tu apprends|il apprend|nous apprenons|vous apprenez|ils apprennent|to learn
+je lis|tu lis|il lit|nous lisons|vous lisez|ils lisent|to read
+j'écris|tu écris|il écrit|nous écrivons|vous écrivez|ils écrivent|to write
+je répète|tu répètes|il répète|nous répétons|vous répétez|ils répètent|to repeat
+je demande|tu demandes|il demande|nous demandons|vous demandez|ils demandent|to ask
+je réponds|tu réponds|il répond|nous répondons|vous répondez|ils répondent|to answer
+je mange|tu manges|il mange|nous mangeons|vous mangez|ils mangent|to eat
+je bois|tu bois|il boit|nous buvons|vous buvez|ils boivent|to drink
+je cuisine|tu cuisines|il cuisine|nous cuisinons|vous cuisinez|ils cuisinent|to cook
+j'achète|tu achètes|il achète|nous achetons|vous achetez|ils achètent|to buy
+je paie|tu paies|il paie|nous payons|vous payez|ils paient|to pay
+—|—|il coûte|—|—|ils coûtent|to cost
+j'aime|tu aimes|il aime|nous aimons|vous aimez|ils aiment|to like / love
+j'adore|tu adores|il adore|nous adorons|vous adorez|ils adorent|to adore
+je préfère|tu préfères|il préfère|nous préférons|vous préférez|ils préfèrent|to prefer
+je déteste|tu détestes|il déteste|nous détestons|vous détestez|ils détestent|to hate
+j'habite|tu habites|il habite|nous habitons|vous habitez|ils habitent|to live
+je travaille|tu travailles|il travaille|nous travaillons|vous travaillez|ils travaillent|to work
+j'étudie|tu étudies|il étudie|nous étudions|vous étudiez|ils étudient|to study
+je joue|tu joues|il joue|nous jouons|vous jouez|ils jouent|to play
+je chante|tu chantes|il chante|nous chantons|vous chantez|ils chantent|to sing
+je danse|tu danses|il danse|nous dansons|vous dansez|ils dansent|to dance
+je marche|tu marches|il marche|nous marchons|vous marchez|ils marchent|to walk
+je cours|tu cours|il court|nous courons|vous courez|ils courent|to run
+je voyage|tu voyages|il voyage|nous voyageons|vous voyagez|ils voyagent|to travel
+je conduis|tu conduis|il conduit|nous conduisons|vous conduisez|ils conduisent|to drive
+je dors|tu dors|il dort|nous dormons|vous dormez|ils dorment|to sleep
+je me lève|tu te lèves|il se lève|nous nous levons|vous vous levez|ils se lèvent|to get up
+je me couche|tu te couches|il se couche|nous nous couchons|vous vous couchez|ils se couchent|to go to bed
+je m'appelle|tu t'appelles|il s'appelle|nous nous appelons|vous vous appelez|ils s'appellent|to be called
+je me lave|tu te laves|il se lave|nous nous lavons|vous vous lavez|ils se lavent|to wash
+je cherche|tu cherches|il cherche|nous cherchons|vous cherchez|ils cherchent|to look for
+je trouve|tu trouves|il trouve|nous trouvons|vous trouvez|ils trouvent|to find
+j'attends|tu attends|il attend|nous attendons|vous attendez|ils attendent|to wait
+j'ouvre|tu ouvres|il ouvre|nous ouvrons|vous ouvrez|ils ouvrent|to open
+je ferme|tu fermes|il ferme|nous fermons|vous fermez|ils ferment|to close
+je commence|tu commences|il commence|nous commençons|vous commencez|ils commencent|to start
+je finis|tu finis|il finit|nous finissons|vous finissez|ils finissent|to finish
+je choisis|tu choisis|il choisit|nous choisissons|vous choisissez|ils choisissent|to choose
+j'aide|tu aides|il aide|nous aidons|vous aidez|ils aident|to help
+j'appelle|tu appelles|il appelle|nous appelons|vous appelez|ils appellent|to call
+je pense|tu penses|il pense|nous pensons|vous pensez|ils pensent|to think
+je crois|tu crois|il croit|nous croyons|vous croyez|ils croient|to believe
+je rencontre|tu rencontres|il rencontre|nous rencontrons|vous rencontrez|ils rencontrent|to meet
+j'invite|tu invites|il invite|nous invitons|vous invitez|ils invitent|to invite
+je téléphone|tu téléphones|il téléphone|nous téléphonons|vous téléphonez|ils téléphonent|to phone
+je porte|tu portes|il porte|nous portons|vous portez|ils portent|to carry
+je ris|tu ris|il rit|nous rions|vous riez|ils rient|to laugh
+je pleure|tu pleures|il pleure|nous pleurons|vous pleurez|ils pleurent|to cry
+j'oublie|tu oublies|il oublie|nous oublions|vous oubliez|ils oublient|to forget
+je me souviens|tu te souviens|il se souvient|nous nous souvenons|vous vous souvenez|ils se souviennent|to remember
+j'utilise|tu utilises|il utilise|nous utilisons|vous utilisez|ils utilisent|to use
+je visite|tu visites|il visite|nous visitons|vous visitez|ils visitent|to visit
+je rentre|tu rentres|il rentre|nous rentrons|vous rentrez|ils rentrent|to go home
+je passe|tu passes|il passe|nous passons|vous passez|ils passent|to pass / spend (time)
+je tombe|tu tombes|il tombe|nous tombons|vous tombez|ils tombent|to fall
+je monte|tu montes|il monte|nous montons|vous montez|ils montent|to go up
+je descends|tu descends|il descend|nous descendons|vous descendez|ils descendent|to go down
+je tourne|tu tournes|il tourne|nous tournons|vous tournez|ils tournent|to turn
+je traverse|tu traverses|il traverse|nous traversons|vous traversez|ils traversent|to cross
+je continue|tu continues|il continue|nous continuons|vous continuez|ils continuent|to continue
+je change|tu changes|il change|nous changeons|vous changez|ils changent|to change
+j'essaie|tu essaies|il essaie|nous essayons|vous essayez|ils essaient|to try
+je gagne|tu gagnes|il gagne|nous gagnons|vous gagnez|ils gagnent|to win / earn
+je perds|tu perds|il perd|nous perdons|vous perdez|ils perdent|to lose
+je garde|tu gardes|il garde|nous gardons|vous gardez|ils gardent|to keep
+je laisse|tu laisses|il laisse|nous laissons|vous laissez|ils laissent|to leave / let
+je montre|tu montres|il montre|nous montrons|vous montrez|ils montrent|to show
+j'explique|tu expliques|il explique|nous expliquons|vous expliquez|ils expliquent|to explain
+je raconte|tu racontes|il raconte|nous racontons|vous racontez|ils racontent|to tell (a story)
+je décris|tu décris|il décrit|nous décrivons|vous décrivez|ils décrivent|to describe
+je permets|tu permets|il permet|nous permettons|vous permettez|ils permettent|to allow
+je sers|tu sers|il sert|nous servons|vous servez|ils servent|to serve
+je reçois|tu reçois|il reçoit|nous recevons|vous recevez|ils reçoivent|to receive
+j'envoie|tu envoies|il envoie|nous envoyons|vous envoyez|ils envoient|to send
+je vends|tu vends|il vend|nous vendons|vous vendez|ils vendent|to sell
+je réserve|tu réserves|il réserve|nous réservons|vous réservez|ils réservent|to book
+je prépare|tu prépares|il prépare|nous préparons|vous préparez|ils préparent|to prepare
+je lave|tu laves|il lave|nous lavons|vous lavez|ils lavent|to wash (something)
+je nettoie|tu nettoies|il nettoie|nous nettoyons|vous nettoyez|ils nettoient|to clean
+je range|tu ranges|il range|nous rangeons|vous rangez|ils rangent|to tidy
+je réfléchis|tu réfléchis|il réfléchit|nous réfléchissons|vous réfléchissez|ils réfléchissent|to think about
+je me promène|tu te promènes|il se promène|nous nous promenons|vous vous promenez|ils se promènent|to go for a walk
+je me repose|tu te reposes|il se repose|nous nous reposons|vous vous reposez|ils se reposent|to rest
+je me dépêche|tu te dépêches|il se dépêche|nous nous dépêchons|vous vous dépêchez|ils se dépêchent|to hurry
+je m'assieds|tu t'assieds|il s'assied|nous nous asseyons|vous vous asseyez|ils s'asseyent|to sit down
+je rêve|tu rêves|il rêve|nous rêvons|vous rêvez|ils rêvent|to dream
+je vis|tu vis|il vit|nous vivons|vous vivez|ils vivent|to live
+je nais|tu nais|il naît|nous naissons|vous naissez|ils naissent|to be born
+je meurs|tu meurs|il meurt|nous mourons|vous mourez|ils meurent|to die
+—|—|il faut|—|—|—|to be necessary (il faut)
+je semble|tu sembles|il semble|nous semblons|vous semblez|ils semblent|to seem
+je deviens|tu deviens|il devient|nous devenons|vous devenez|ils deviennent|to become`;
+const PRON = ['je', 'tu', 'il / elle', 'nous', 'vous', 'ils / elles'];
+const WORDS = [];
+const TOPICS = RAW.map((t, ti) => {
+  const ids = [];
+  t[1].split('|').forEach((p) => {
+    const k = p.indexOf('=');
+    const w = { id: WORDS.length, tp: ti, v: false, fr: p.slice(0, k).replace(/'/g, '’'), en: p.slice(k + 1).replace(/'/g, '’') };
+    WORDS.push(w); ids.push(w.id);
+  });
+  return { title: t[0], ids, verb: false };
+});
+(() => {
+  const ids = [];
+  VERB_ROWS.split('\n').forEach((ln) => {
+    const f = ln.replace(/'/g, '’').split('|');
+    const forms = f.slice(0, 6);
+    const w = { id: WORDS.length, tp: TOPICS.length, v: true, forms, en: f[6], fr: forms.filter((x) => x !== '—').join(' · ') };
+    WORDS.push(w); ids.push(w.id);
+  });
+  TOPICS.push({ title: 'Verbs: the forms you say', ids, verb: true });
+})();
+const DAY = 86400000, INT = [0, 1, 2, 4, 8, 16];
+const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+const norm = (s) => String(s).toLowerCase().normalize('NFC').replace(/'/g, '’').replace(/[.,!?…;:]/g, '').replace(/\s+/g, ' ').trim();
+const plain = (s) => norm(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/œ/g, 'oe');
+const cleanEn = (s) => s.replace(/\([^)]*\)/g, '').replace(/…/g, '').replace(/\s+/g, ' ').trim();
+const speakText = (fr) => fr.replace(/\([^)]*\)/g, '').replace(/…/g, ',').replace(/ \/ /g, ', ').replace(/\s+/g, ' ').trim();
+const dropArt = (v) => v.replace(/^(le |la |l’|les |un |une |des |du |de la |de l’)/, '');
+const frVariants = (fr) => {
+  const out = new Set();
+  fr.split(' / ').forEach((part) => {
+    const p = part.replace(/…/g, '').trim();
+    const vs = [];
+    const m = p.match(/^(.*?)\(([a-zéè]{1,3})\)(.*)$/);
+    if (m) { vs.push((m[1] + m[3]).trim()); vs.push((m[1] + m[2] + m[3]).trim()); }
+    else vs.push(p.replace(/\s*\([^)]*\)/g, '').trim());
+    vs.forEach((v) => { if (!v) return; out.add(norm(v)); const d = dropArt(norm(v)); if (d) out.add(d); });
+  });
+  return Array.from(out);
+};
+const formVariants = (form, p) => {
+  const out = new Set([norm(form)]);
+  if (p === 2) { out.add(norm(form.replace(/^il /, 'elle '))); out.add(norm(form.replace(/^il /, 'on '))); out.add(norm(form.replace(/^il /, 'on ').replace(/^on se /, 'on se '))); }
+  if (p === 5) out.add(norm(form.replace(/^ils /, 'elles ')));
+  return Array.from(out);
+};
+const enVariants = (en) => {
+  const out = new Set();
+  en.split(' / ').forEach((part) => {
+    const v = norm(cleanEn(part));
+    if (!v) return; out.add(v);
+    out.add(v.replace(/^to /, '')); out.add(v.replace(/^the /, ''));
+  });
+  return Array.from(out);
+};
+const hasEllipsis = (w) => !w.v && (w.fr.indexOf('…') >= 0 || w.en.indexOf('…') >= 0);
+const SUBJ = ['I', 'you', 'he / she', 'we', 'you (pl.)', 'they'];
+const third = (v) => (/(s|sh|ch|x|z)$/.test(v) ? v + 'es' : /[^aeiou]y$/.test(v) ? v.slice(0, -1) + 'ies' : v + 's');
+const conjEn = (v, i) => {
+  if (v === 'be') return ['am', 'are', 'is', 'are', 'are', 'are'][i];
+  if (v === 'have') return i === 2 ? 'has' : 'have';
+  if (v === 'go') return i === 2 ? 'goes' : 'go';
+  if (v === 'do') return i === 2 ? 'does' : 'do';
+  return i === 2 ? third(v) : v;
+};
+const enForm = (w, i) => {
+  if (w.forms[i] === '—') return '';
+  if (/^to be necessary/.test(w.en)) return 'it is necessary';
+  const defective = w.forms[0] === '—';
+  const subj = defective ? (i === 2 ? 'it' : 'they') : SUBJ[i];
+  const alts = w.en.split(' / ').map((a) => a.trim()).map((a) => {
+    let paren = ''; const m = a.match(/^(.*?)(\s*\(.*\))$/); if (m) { a = m[1]; paren = m[2]; }
+    a = a.replace(/^to /, '');
+    if (a === 'be able to') return 'can' + paren;
+    const words = a.split(' '); const rest = words.slice(1).join(' ');
+    return conjEn(words[0], i) + (rest ? ' ' + rest : '') + paren;
+  });
+  return subj + ' ' + alts.join(' / ');
+};
+const validForms = (w) => w.forms.map((f, i) => (f === '—' ? -1 : i)).filter((i) => i >= 0);
+const SRC = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
+const canSpeak = () => typeof speechSynthesis !== 'undefined' && typeof SpeechSynthesisUtterance !== 'undefined';
+const VOICES = { l: [] }, KEEP = []; let ttsAudio = null;
+const loadVoices = () => { try { VOICES.l = speechSynthesis.getVoices() || []; } catch (e) {} };
+try { loadVoices(); if (speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged', loadVoices); } catch (e) {}
+const vl = (v) => String(v.lang || '').toLowerCase().replace('_', '-');
+const pickVoice = (lang) => { loadVoices(); const L = lang.toLowerCase().replace('_', '-'); const fr = VOICES.l.filter((v) => vl(v).slice(0, 2) === L.slice(0, 2)); return fr.find((v) => vl(v) === L) || fr[0] || null; };
+const sayText = (text, lang, rate, cb) => {
+  let done = false, started = false, timer = null, fb = null;
+  const fin = () => { if (done) return; done = true; clearTimeout(timer); clearTimeout(fb); if (cb) cb(); };
+  const viaAudio = () => { if (done) return; try { if (ttsAudio) ttsAudio.pause(); const a = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + lang.slice(0, 2) + '&q=' + encodeURIComponent(text)); ttsAudio = a; a.onended = fin; a.onerror = fin; const pr = a.play(); if (pr && pr.catch) pr.catch(fin); } catch (e) { fin(); } };
+  try {
+    timer = setTimeout(fin, 4000 + text.length * 140);
+    if (!canSpeak()) { viaAudio(); return; }
+    if (ttsAudio) { try { ttsAudio.pause(); } catch (e) {} }
+    const u = new SpeechSynthesisUtterance(text); u.lang = lang; u.rate = rate || 0.9; u.volume = 1;
+    const v = pickVoice(lang); if (v) u.voice = v;
+    KEEP.push(u); if (KEEP.length > 8) KEEP.shift();
+    u.onstart = () => { started = true; };
+    u.onend = fin; u.onerror = () => { if (!started) viaAudio(); else fin(); };
+    if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+    try { speechSynthesis.resume(); } catch (e) {}
+    speechSynthesis.speak(u);
+    fb = setTimeout(() => { if (!started && !done) { try { speechSynthesis.cancel(); } catch (e) {} viaAudio(); } }, 1800);
+  } catch (e) { fin(); }
+};
+const speakNow = (fr, rate) => { sayText(speakText(fr), 'fr-FR', rate || 0.9); };
+const ACCENTS = ['é', 'è', 'ê', 'à', 'â', 'ç', 'ô', 'î', 'û', 'ù', 'ï', 'œ', '’'];
+const Q_MODES = [
+  { id: 'enfr', label: 'English text', sub: 'You give the French' },
+  { id: 'fren', label: 'French text + sound', sub: 'You give the English' },
+  { id: 'vfr', label: 'Voice → French', sub: 'You hear it and give the French' },
+  { id: 'ven', label: 'Voice → English', sub: 'You hear it and give the meaning' },
+  { id: 'mix', label: 'Mixed', sub: 'All of the above, shuffled' }
+];
+const A_MODES = [
+  { id: 'type', label: 'Typing', sub: 'Spell it yourself' },
+  { id: 'pick', label: 'Picking text', sub: 'Choose from four written options' },
+  { id: 'sound', label: 'Picking a sound', sub: 'Choose from four spoken options' },
+  { id: 'speak', label: 'Speaking', sub: 'Say the French into your microphone' }
+];
+const distractWord = (w, lang) => {
+  const key = lang === 'fr' ? 'fr' : 'en';
+  const same = TOPICS[w.tp].ids.map((i) => WORDS[i]);
+  const cand = shuffle(same.concat(shuffle(WORDS.filter((x) => !x.v)).slice(0, 40))).filter((x) => x.id !== w.id && !x.v && x[key] !== w[key]);
+  const seen = new Set([w[key]]); const out = [];
+  for (const c of cand) { if (!seen.has(c[key])) { seen.add(c[key]); out.push(c[key]); } if (out.length === 3) break; }
+  return out;
+};
+const distractVerb = (w, p, lang) => {
+  if (lang === 'en') {
+    const seen = new Set([w.en]); const out = [];
+    for (const c of shuffle(TOPICS[TOPICS.length - 1].ids.map((i) => WORDS[i]))) { if (c.id !== w.id && !seen.has(c.en)) { seen.add(c.en); out.push(c.en); } if (out.length === 3) break; }
+    return out;
+  }
+  const answer = w.forms[p]; const seen = new Set([answer]); const out = [];
+  shuffle(validForms(w)).forEach((i) => { if (out.length < 2 && !seen.has(w.forms[i])) { seen.add(w.forms[i]); out.push(w.forms[i]); } });
+  for (const c of shuffle(TOPICS[TOPICS.length - 1].ids.map((i) => WORDS[i]))) { if (out.length >= 3) break; if (c.id !== w.id && c.forms[p] !== '—' && !seen.has(c.forms[p])) { seen.add(c.forms[p]); out.push(c.forms[p]); } }
+  return out;
+};
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    let wd = {};
+    try { wd = JSON.parse(localStorage.getItem('allez_vocab_v3') || '{}') || {}; } catch (e) { wd = {}; }
+    this.state = { screen: 'home', topic: 0, wd, tm: this.loadTm(), query: '', pool: null, qm: 'mix', am: 'type', len: 10,
+      speed: 0.9, incEn: false, cover: 'none', rev: {}, playIdx: -1,
+      q: null, pick: null, typed: '', heard: [], listening: false, micErr: '', checked: false, correct: false, almost: false, forceType: false };
+    this._tok = 0; this._rec = null;
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.wd !== this.state.wd) { try { localStorage.setItem('allez_vocab_v3', JSON.stringify(this.state.wd)); } catch (e) {} }
+  }
+  loadTm() { try { const o = JSON.parse(localStorage.getItem('allez_time_v1') || '{}') || {}; return { d: o.d || {}, goal: o.goal || 60 }; } catch (e) { return { d: {}, goal: 60 }; } }
+  saveTm(fn) { const o = this.loadTm(); fn(o); try { localStorage.setItem('allez_time_v1', JSON.stringify(o)); } catch (e) {} this.setState({ tm: o }); }
+  dayKey() { const t = new Date(); return t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0'); }
+  flushTime() { if (this._pend > 0) { const add = this._pend; this._pend = 0; const k = this.dayKey(); this.saveTm((o) => { o.d[k] = (o.d[k] || 0) + add; }); } }
+  componentDidMount() {
+    this._act = Date.now(); this._pend = 0;
+    this._mark = () => { this._act = Date.now(); };
+    try { ['pointerdown', 'touchstart', 'input'].forEach((e) => document.addEventListener(e, this._mark, true)); document.addEventListener('scroll', this._mark, true); } catch (e) {}
+    this._iv = setInterval(() => {
+      let vis = true; try { vis = document.visibilityState !== 'hidden'; } catch (e) {}
+      const learning = ['topic', 'setup', 'play', 'result'].indexOf(this.state.screen) >= 0;
+      const active = learning && (Date.now() - this._act < 60000 || this.state.playIdx >= 0);
+      if (vis && active) this._pend += 1;
+      if (this._pend >= 5) this.flushTime();
+      if (['topic', 'play', 'setup'].indexOf(this.state.screen) >= 0) this.setState({ tick: Date.now() });
+    }, 1000);
+  }
+  componentWillUnmount() {
+    this.stopAll(); try { clearInterval(this._iv); this.flushTime(); ['pointerdown', 'touchstart', 'input'].forEach((e) => document.removeEventListener(e, this._mark, true)); document.removeEventListener('scroll', this._mark, true); } catch (e) {}
+  }
+  stopAll() { this._tok++; try { if (canSpeak()) speechSynthesis.cancel(); } catch (e) {} try { if (this._rec) this._rec.abort(); } catch (e) {} }
+  isMastered(id) { const d = this.state.wd[id]; return !!d && (!!d.k || d.b >= 4); }
+  touch(id, ok) {
+    const wd = Object.assign({}, this.state.wd); const d = Object.assign({ b: 0, t: 0, k: 0, w: 0 }, wd[id] || {});
+    d.t = Date.now();
+    if (ok) { d.b = Math.min(5, d.b + 1); if (d.b >= 2) d.w = 0; } else { d.b = 0; d.w = 1; }
+    wd[id] = d; return wd;
+  }
+  sayRow(forms, tok, cb) {
+    const list = forms.filter((f) => f !== '—'); let k = 0;
+    const step = () => {
+      if (this._tok !== tok) return;
+      if (k >= list.length) { if (cb) cb(); return; }
+      sayText(speakText(list[k]), 'fr-FR', this.state.speed, () => { k++; setTimeout(step, 300); });
+    };
+    try { if (canSpeak()) speechSynthesis.cancel(); } catch (e) {}
+    step();
+  }
+  renderVals() {
+    const s = this.state;
+    const accent = this.props.accent ?? '#2F5BEA';
+    const now = Date.now();
+    const isMastered = (id) => this.isMastered(id);
+    const isDue = (id) => { const d = s.wd[id]; return !!d && d.t > 0 && (d.b === 0 || now >= d.t + INT[Math.min(d.b, 5)] * DAY); };
+    const allIds = WORDS.map((w) => w.id);
+    const dueIds = allIds.filter(isDue), weakIds = allIds.filter((id) => s.wd[id] && s.wd[id].w);
+    const nMastered = allIds.filter(isMastered).length;
+
+    const openSetup = (label, ids, back) => () => { this.stopAll(); this.setState({ screen: 'setup', pool: { label, ids, back } }); };
+    const say = (w) => () => { if (w.v) { const tok = ++this._tok; this.sayRow(w.forms, tok); } else speakNow(w.fr, this.state.speed); };
+    const backHome = () => { this.stopAll(); this.setState({ screen: 'home', playIdx: -1, q: null }); };
+
+    // HOME
+    const qs = s.query.trim();
+    const qn = plain(qs);
+    const results = qs ? WORDS.filter((w) => plain(w.fr).indexOf(qn) >= 0 || plain(w.en).indexOf(qn) >= 0).slice(0, 30).map((w) => ({ fr: w.fr, en: w.en, say: say(w) })) : [];
+    const topics = TOPICS.map((t, i) => {
+      const m = t.ids.filter(isMastered).length;
+      return { n: i + 1, title: t.title, prog: m + '/' + t.ids.length, bar: 'display:block;height:100%;border-radius:999px;background:#1F7A4D;width:' + Math.round((m / t.ids.length) * 100) + '%',
+        open: () => this.setState({ screen: 'topic', topic: i, rev: {}, playIdx: -1 }) };
+    });
+
+    // TOPIC
+    const T = TOPICS[s.topic];
+    const rows = T.ids.map((id, idx) => {
+      const w = WORDS[id]; const ticked = isMastered(id); const hot = s.playIdx === idx;
+      const hideFr = s.cover === 'fr' && !s.rev[id], hideEn = s.cover === 'en' && !s.rev[id];
+      const tick = () => { const wd = Object.assign({}, this.state.wd); const d = Object.assign({ b: 0, t: 0, k: 0, w: 0 }, wd[id] || {}); d.k = d.k ? 0 : 1; if (d.k) d.w = 0; wd[id] = d; this.setState({ wd }); };
+      const reveal = () => this.setState({ rev: Object.assign({}, this.state.rev, { [id]: !this.state.rev[id] }) });
+      const tickStyle = 'width:32px;height:32px;margin:0 6px 0 2px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;border:2px solid ' + (ticked ? '#1F7A4D' : '#14213D') + ';background:' + (ticked ? '#1F7A4D' : '#fff');
+      if (w.v) {
+        return { n: idx + 1, domId: 'w-' + id, isWord: false, isVerb: true, en: hideEn ? 'tap to show' : w.en, plain: w.en,
+          style: 'display:flex;flex-direction:column;border-bottom:1px solid #E4DFD2;border-radius:10px;padding-top:4px;' + (hot ? 'background:#E8EEFD' : ''),
+          say: say(w), ticked, tickAria: ticked ? 'true' : 'false', reveal, tick, tickStyle,
+          forms: w.forms.map((f, fi) => ({ text: f === '—' ? '—' : hideFr ? '• • •' : f, sub: f === '—' ? 'no such form' : hideEn ? '• • •' : enForm(w, fi), none: f === '—',
+            style: 'min-height:52px;padding:6px 10px;border-radius:10px;text-align:left;color:#14213D;background:#fff;border:1.5px solid #D9D4C7;' + (f === '—' ? 'opacity:0.45' : ''),
+            say: () => speakNow(f, this.state.speed) })) };
+      }
+      return { n: idx + 1, domId: 'w-' + id, isWord: true, isVerb: false, fr: hideFr ? '• • •' : w.fr, en: hideEn ? 'tap to show' : w.en, plain: speakText(w.fr),
+        style: 'display:flex;align-items:center;gap:2px;border-bottom:1px solid #E4DFD2;border-radius:10px;' + (hot ? 'background:#E8EEFD' : ''),
+        say: say(w), ticked, tickAria: ticked ? 'true' : 'false', reveal, tick, tickStyle, forms: [] };
+    });
+    const togglePlay = () => {
+      if (this.state.playIdx >= 0) { this.stopAll(); this.setState({ playIdx: -1 }); return; }
+      const ids = TOPICS[this.state.topic].ids; const token = ++this._tok; let k = 0;
+      const step = () => {
+        if (this._tok !== token) return;
+        if (k >= ids.length) { this.setState({ playIdx: -1 }); return; }
+        const w = WORDS[ids[k]]; this.setState({ playIdx: k });
+        try { const el = document.getElementById('w-' + w.id); if (el && el.scrollIntoView) el.scrollIntoView({ block: 'center' }); } catch (e) {}
+        const afterFr = () => {
+          if (this._tok !== token) return;
+          const after = () => { k++; setTimeout(step, 450); };
+          if (this.state.incEn) sayText(cleanEn(w.en), 'en-US', 0.95, after); else after();
+        };
+        if (w.v) this.sayRow(w.forms, token, afterFr); else sayText(speakText(w.fr), 'fr-FR', this.state.speed, afterFr);
+      };
+      step();
+    };
+    const pill = (on) => 'min-height:44px;padding:0 14px;border-radius:999px;font-weight:700;font-size:14px;background:' + (on ? '#14213D' : '#fff') + ';color:' + (on ? '#F7F4EE' : '#14213D') + ';border:1.5px solid #14213D';
+    const covers = [['none', 'Off'], ['en', 'English'], ['fr', 'French']].map((c) => ({ label: c[1], pressed: s.cover === c[0] ? 'true' : 'false', style: pill(s.cover === c[0]), pick: () => this.setState({ cover: c[0], rev: {} }) }));
+
+    // SETUP
+    const speechOk = canSpeak();
+    const mkMode = (c, on, off) => ({ label: c.label, sub: off ? (c.id === 'speak' ? 'Not supported in this browser' : 'Needs a speech voice') : c.sub, pressed: on ? 'true' : 'false',
+      style: 'display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;min-height:56px;padding:10px 14px;border-radius:14px;font-size:16px;color:' + (on ? '#fff' : INK) + ';background:' + (on ? accent : '#fff') + ';border:2px solid ' + (on ? accent : '#D9D4C7') + (off ? ';opacity:0.5' : '') });
+    const qModes = Q_MODES.map((c) => { const off = !speechOk && (c.id === 'vfr' || c.id === 'ven'); return Object.assign(mkMode(c, s.qm === c.id, off), { pick: () => { if (!off) this.setState({ qm: c.id }); } }); });
+    const aModes = A_MODES.map((c) => { const off = (c.id === 'sound' && !speechOk) || (c.id === 'speak' && !SRC); return Object.assign(mkMode(c, s.am === c.id, off), { pick: () => { if (!off) this.setState({ am: c.id }); } }); });
+    const lens = [10, 20, 30].map((n) => ({ label: String(n), pressed: s.len === n ? 'true' : 'false', style: 'flex:1;min-height:48px;border-radius:12px;font-weight:700;font-size:16px;color:' + (s.len === n ? '#fff' : INK) + ';background:' + (s.len === n ? accent : '#fff') + ';border:2px solid ' + (s.len === n ? accent : '#D9D4C7'), pick: () => this.setState({ len: n }) }));
+
+    const buildItems = (ids, qm, am, len) => {
+      const pick = shuffle(ids).slice(0, len);
+      return pick.map((id) => {
+        const w = WORDS[id];
+        let qk = qm === 'mix' ? shuffle(speechOk ? ['enfr', 'fren', 'vfr', 'ven'] : ['enfr', 'fren'])[0] : qm;
+        if (!speechOk && (qk === 'vfr' || qk === 'ven')) qk = qk === 'vfr' ? 'enfr' : 'fren';
+        const ansLang = qk === 'enfr' || qk === 'vfr' ? 'fr' : 'en';
+        let ak = am;
+        if (ansLang === 'en' && (ak === 'sound' || ak === 'speak')) ak = 'pick';
+        if (hasEllipsis(w) && (ak === 'type' || ak === 'speak')) ak = 'pick';
+        let p = 0, answer, frShown, vars;
+        if (w.v) {
+          p = shuffle(validForms(w))[0];
+          frShown = w.forms[p];
+          answer = ansLang === 'fr' ? frShown : w.en;
+          vars = ansLang === 'fr' ? formVariants(frShown, p) : enVariants(w.en);
+        } else {
+          frShown = w.fr; answer = ansLang === 'fr' ? w.fr : w.en;
+          vars = ansLang === 'fr' ? frVariants(w.fr) : enVariants(w.en);
+        }
+        const options = (ak === 'pick' || ak === 'sound') ? shuffle([answer].concat(w.v ? distractVerb(w, p, ansLang) : distractWord(w, ansLang))) : [];
+        return { id, v: w.v, p, qk, ak, ansLang, answer, frShown, vars, options };
+      });
+    };
+    const reset = { pick: null, typed: '', heard: [], listening: false, micErr: '', checked: false, correct: false, almost: false, forceType: false };
+    const autoSay = (it) => { if (it && (it.qk === 'vfr' || it.qk === 'ven' || it.qk === 'fren')) setTimeout(() => speakNow(it.frShown, 0.9), 200); };
+    const runQuiz = (ids) => {
+      const st = this.state; const items = buildItems(ids, st.qm, st.am, st.len);
+      this.stopAll();
+      this.setState(Object.assign({ screen: 'play', q: { items, i: 0, right: 0, missed: [], ids } }, reset));
+      autoSay(items[0]);
+    };
+    const startQuiz = () => runQuiz(this.state.pool.ids);
+    const retryMissed = () => { const m = this.state.q.missed; if (m.length) runQuiz(m); };
+
+    // PLAY
+    const Q = s.q; const it = Q ? Q.items[Math.min(Q.i, Q.items.length - 1)] : null;
+    const w = it ? WORDS[it.id] : WORDS[0];
+    const ak = it ? (s.forceType ? 'type' : it.ak) : 'pick';
+    const qk = it ? it.qk : 'enfr';
+    const voiceQ = qk === 'vfr' || qk === 'ven';
+    const showPrompt = qk === 'enfr' || qk === 'fren';
+    const promptText = !it ? '' : qk === 'enfr' ? (it.v ? w.en + ' · ' + PRON[it.p] : (cleanEn(w.en) || w.en)) : it.frShown;
+    const qLabel = qk === 'enfr' ? (it && it.v ? 'Give the right form' : 'Say it in French') : qk === 'fren' ? 'What does it mean?' : qk === 'vfr' ? 'Listen. Write it in French' : 'Listen. What does it mean?';
+    const hasSpeaker = qk !== 'enfr';
+    const opts = (it && (ak === 'pick' || ak === 'sound')) ? it.options.map((t, i) => {
+      const sel = s.pick === t, isAns = t === it.answer;
+      let bg = '#fff', bd = '#D9D4C7';
+      if (s.checked) { if (isAns) { bg = '#E3F3EA'; bd = '#1F7A4D'; } else if (sel) { bg = '#FBE4E1'; bd = '#B3261E'; } }
+      else if (sel) { bg = '#E8EEFD'; bd = accent; }
+      return { text: t, key: String.fromCharCode(65 + i), soundLabel: s.checked ? t : 'Option ' + String.fromCharCode(65 + i),
+        style: 'display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 14px;border-radius:14px;text-align:left;font-size:17px;font-weight:500;color:' + INK + ';background:' + bg + ';border:2px solid ' + bd,
+        pick: () => { if (this.state.checked) return; this.setState({ pick: t }); if (ak === 'sound') speakNow(t, 0.9); } };
+    }) : [];
+    const matches = (txt) => {
+      if (!it) return { ok: false, almost: false };
+      const vs = it.vars; const n = norm(txt); const p = plain(txt);
+      if (vs.indexOf(n) >= 0) return { ok: true, almost: false };
+      if (vs.map(plain).indexOf(p) >= 0) return { ok: it.ansLang === 'en' || ak === 'speak', almost: it.ansLang === 'fr' && ak === 'type' };
+      return { ok: false, almost: false };
+    };
+    const canCheck = ak === 'type' ? s.typed.trim().length > 0 : ak === 'speak' ? s.heard.length > 0 : s.pick !== null;
+    const check = () => {
+      const st = this.state; let ok = false, almost = false;
+      if (ak === 'type') { const r = matches(st.typed); ok = r.ok; almost = r.almost; }
+      else if (ak === 'speak') ok = st.heard.some((h) => matches(h).ok);
+      else ok = st.pick === it.answer;
+      const q = Object.assign({}, st.q); if (ok) q.right += 1; else q.missed = q.missed.concat([it.id]);
+      this.setState({ checked: true, correct: ok, almost, q, wd: this.touch(it.id, ok) });
+      speakNow(it.frShown, 0.9);
+    };
+    const next = () => {
+      const st = this.state; const q = st.q; const ni = q.i + 1;
+      if (ni >= q.items.length) { this.stopAll(); this.setState(Object.assign({ screen: 'result', q: Object.assign({}, q, { i: ni }) }, reset)); return; }
+      this.setState(Object.assign({ q: Object.assign({}, q, { i: ni }) }, reset));
+      autoSay(q.items[ni]);
+    };
+    const toggleMic = () => {
+      if (!SRC) { this.setState({ micErr: 'Speech recognition is not available in this browser.' }); return; }
+      if (this.state.listening) { try { this._rec.stop(); } catch (e) {} return; }
+      try {
+        const rec = new SRC(); this._rec = rec; rec.lang = 'fr-FR'; rec.maxAlternatives = 4; rec.interimResults = false;
+        rec.onresult = (e) => { const list = []; const r = e.results[0]; for (let i = 0; i < r.length; i++) list.push(r[i].transcript); this.setState({ heard: list, micErr: '' }); };
+        rec.onerror = (e) => this.setState({ micErr: e && e.error === 'not-allowed' ? 'The microphone is blocked here. Use “type it instead”.' : 'I could not hear you. Try again.', listening: false });
+        rec.onend = () => this.setState({ listening: false });
+        this.setState({ listening: true, heard: [], micErr: '' }); rec.start();
+      } catch (e) { this.setState({ micErr: 'The microphone could not start.', listening: false }); }
+    };
+
+    const ok = s.correct;
+    const bar = Q ? 'height:100%;border-radius:999px;background:' + accent + ';width:' + Math.round((Math.min(Q.i + (s.checked ? 1 : 0), Q.items.length) / Q.items.length) * 100) + '%;transition:width .3s' : '';
+    const total = Q ? Q.items.length : 0;
+    const missed = Q ? Array.from(new Set(Q.missed)).map((id) => ({ fr: WORDS[id].fr, en: WORDS[id].en, say: say(WORDS[id]) })) : [];
+    const pct = Q && total ? Math.round((Q.right / total) * 100) : 0;
+    const fbTitle = ok ? 'Bien joué!' : s.almost ? 'Almost! Mind the accents.' : 'Not quite.';
+    const fbPair = it ? (it.v ? it.frShown + ' = ' + w.en + ' (' + PRON[it.p] + ')' : w.fr + ' = ' + w.en) : '';
+
+    // STUDY LOG
+    const tm = s.tm; const keyOf = (dt) => dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+    const today = new Date(); const tkey = keyOf(today);
+    const secOf = (k) => tm.d[k] || 0;
+    const fmt = (sec) => { const m = Math.floor(sec / 60); return m >= 60 ? Math.floor(m / 60) + ' h ' + String(m % 60).padStart(2, '0') + ' min' : m + ' min'; };
+    const dayBack = (n) => { const dt = new Date(today.getFullYear(), today.getMonth(), today.getDate() - n); return dt; };
+    let streak = 0; for (let n = secOf(tkey) >= 60 ? 0 : 1; n < 4000; n++) { if (secOf(keyOf(dayBack(n))) >= 60) streak++; else break; }
+    const keysAll = Object.keys(tm.d).filter((k) => tm.d[k] > 0).sort();
+    const daysStudied = keysAll.filter((k) => tm.d[k] >= 60).length;
+    let courseDay = 1;
+    if (keysAll.length) { const [y, mo, dd] = keysAll[0].split('-').map(Number); courseDay = Math.floor((new Date(today.getFullYear(), today.getMonth(), today.getDate()) - new Date(y, mo - 1, dd)) / DAY) + 1; }
+    const totalSec = keysAll.reduce((a, k) => a + tm.d[k], 0);
+    let weekSec = 0; for (let n = 0; n < 7; n++) weekSec += secOf(keyOf(dayBack(n)));
+    const todaySec = secOf(tkey); const goalSec = tm.goal * 60;
+    const days14 = []; for (let n = 13; n >= 0; n--) { const dt = dayBack(n); days14.push({ dt, k: keyOf(dt), sec: secOf(keyOf(dt)), n }); }
+    const scaleMin = Math.max(tm.goal, ...days14.map((d) => Math.round(d.sec / 60)), 1);
+    const bars = days14.map((d) => { const m = Math.round(d.sec / 60); const met = d.sec >= goalSec; return { day: ['S', 'M', 'T', 'W', 'T', 'F', 'S'][d.dt.getDay()], val: m > 0 ? String(m) : '', aria: d.k + ': ' + m + ' minutes',
+      style: 'width:100%;max-width:20px;border-radius:4px 4px 0 0;min-height:' + (m > 0 ? 3 : 0) + 'px;height:' + Math.round((m / scaleMin) * 96) + 'px;background:' + (d.n === 0 ? accent : met ? '#1F7A4D' : '#8A97AD') }; });
+    const gp = Math.min(100, Math.round((todaySec / goalSec) * 100));
+    const goalBar = 'display:block;height:100%;border-radius:999px;background:' + (todaySec >= goalSec ? '#1F7A4D' : accent) + ';width:' + gp + '%;transition:width .3s';
+    const addMin = (n) => () => { const k = this.dayKey(); this.saveTm((o) => { o.d[k] = Math.max(0, (o.d[k] || 0) + n * 60); }); };
+
+    return {
+      showTimer: s.screen !== 'stats',
+      timerText: (() => { const t = todaySec + (this._pend || 0); const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), sc = t % 60; const p = (n) => String(n).padStart(2, '0'); return 'Day ' + courseDay + ' · ' + (h > 0 ? h + ':' + p(m) : m) + ':' + p(sc); })(),
+      isStats: s.screen === 'stats', openStats: () => { this.flushTime(); this.setState({ screen: 'stats' }); },
+      todayFmt: fmt(todaySec), goalMin: tm.goal, goalBar, goalBarDark: 'height:100%;border-radius:999px;background:' + (todaySec >= goalSec ? '#7FE0A8' : '#F7F4EE') + ';width:' + gp + '%;transition:width .3s',
+      streak, courseDay, daysStudied, weekFmt: fmt(weekSec), totalFmt: fmt(totalSec), bars,
+      streakLine: streak > 0 ? streak + '-day streak · ' + daysStudied + ' days studied' : 'No streak yet. Study 1 minute today to start one.',
+      goalLine: todaySec >= goalSec ? 'Goal reached. Well done.' : fmt(goalSec - todaySec) + ' left to reach your ' + tm.goal + ' min goal.',
+      goalLineStyle: 'position:absolute;left:0;right:0;border-top:2px dashed #B3261E;bottom:' + Math.round((tm.goal / scaleMin) * 96 + 14) + 'px',
+      goalChips: [15, 30, 60, 90, 120, 180].map((n) => ({ label: n + ' min', pressed: tm.goal === n ? 'true' : 'false', pick: () => this.saveTm((o) => { o.goal = n; }),
+        style: 'min-height:44px;padding:0 14px;border-radius:999px;font-weight:700;font-size:14px;background:' + (tm.goal === n ? '#14213D' : '#fff') + ';color:' + (tm.goal === n ? '#F7F4EE' : '#14213D') + ';border:1.5px solid #14213D' })),
+      logChips: [[15, '+15 min'], [30, '+30 min'], [60, '+1 h'], [-15, '−15 min']].map((c) => ({ label: c[1], pick: addMin(c[0]) })),
+      courseBar: 'height:100%;border-radius:999px;background:#1F7A4D;width:' + Math.min(100, Math.round((totalSec / 3600 / 90) * 100)) + '%;transition:width .3s',
+      isHome: s.screen === 'home', isTopic: s.screen === 'topic', isSetup: s.screen === 'setup', isPlay: s.screen === 'play', isResult: s.screen === 'result',
+      nMastered, nDue: dueIds.length, nWeak: weakIds.length, noDue: dueIds.length === 0, noWeak: weakIds.length === 0,
+      dueBtn: 'min-height:48px;border-radius:14px;font-weight:700;font-size:15px;border:0;background:' + (dueIds.length ? accent : '#D9D4C7') + ';color:' + (dueIds.length ? '#fff' : '#5B6478'),
+      weakBtn: 'flex:1;min-height:48px;border-radius:14px;font-weight:700;font-size:15px;background:transparent;border:1.5px solid ' + (weakIds.length ? INK : '#D9D4C7') + ';color:' + (weakIds.length ? INK : '#5B6478'),
+      reviewDue: openSetup('Entries due today (' + dueIds.length + ')', dueIds, 'home'),
+      fixWeak: openSetup('My mistakes (' + weakIds.length + ')', weakIds, 'home'),
+      quizAll: openSetup('Everything: all 631 entries', allIds, 'home'),
+      query: s.query, onSearch: (e) => this.setState({ query: e.target.value }), hasQuery: qs.length > 0, noQuery: qs.length === 0, results, noResults: qs.length > 0 && results.length === 0, topics,
+      backHome,
+      curN: s.topic + 1, curTitle: T.title, curCount: T.ids.length, curUnit: T.verb ? 'verbs' : 'words', isVerbTopic: T.verb, rows, covers,
+      playLabel: s.playIdx >= 0 ? 'Stop' : 'Play all', playStyle: 'flex:1;min-height:44px;border-radius:999px;font-weight:700;font-size:15px;border:0;background:' + (s.playIdx >= 0 ? '#B3261E' : accent) + ';color:#fff', togglePlay,
+      chipStyle: pill(false), speedLabel: s.speed < 0.8 ? 'Slow' : 'Normal', toggleSpeed: () => this.setState({ speed: this.state.speed < 0.8 ? 0.9 : 0.6 }),
+      enPressed: s.incEn ? 'true' : 'false', enChipStyle: pill(s.incEn), toggleEn: () => this.setState({ incEn: !this.state.incEn }),
+      quizTopic: openSetup('Topic ' + (s.topic + 1) + ': ' + T.title + ' (' + T.ids.length + (T.verb ? ' verbs)' : ' words)'), T.ids, 'topic'),
+      poolLabel: s.pool ? s.pool.label : '', qModes, aModes, lens, noSpeech: !speechOk, startQuiz,
+      setupBack: () => this.setState({ screen: s.pool && s.pool.back === 'topic' ? 'topic' : 'home' }),
+      quitQuiz: () => { this.stopAll(); this.setState({ screen: 'home', q: null }); },
+      bar, pos: Q ? Math.min(Q.i + 1, total) + '/' + total : '', qLabel, showPrompt, promptText, promptSize: promptText.length > 22 ? 24 : 32, voiceQ, hasSpeaker,
+      replay: () => { if (it) speakNow(it.frShown, 0.9); },
+      isPick: ak === 'pick', isSound: ak === 'sound', isType: ak === 'type', isSpeak: ak === 'speak', opts,
+      typed: s.typed, onType: (e) => this.setState({ typed: e.target.value }), showAccents: it ? it.ansLang === 'fr' : true,
+      typePlaceholder: it && it.ansLang === 'fr' ? (it.v ? 'Type the form, e.g. nous allons' : 'Type it in French') : 'Type the English meaning',
+      accents: ACCENTS.map((ch) => ({ ch, add: () => { if (!this.state.checked) this.setState({ typed: this.state.typed + ch }); } })),
+      inputStyle: 'min-height:56px;box-sizing:border-box;width:100%;border-radius:14px;padding:0 16px;font-size:20px;font-family:inherit;color:' + INK + ';background:#fff;border:2px solid ' + (s.checked ? (ok ? '#1F7A4D' : '#B3261E') : '#D9D4C7'),
+      toggleMic, micLabel: s.listening ? 'Listening… tap to stop' : 'Tap and say it', micStyle: 'min-height:56px;padding:0 22px;border-radius:999px;font-weight:700;font-size:16px;border:0;color:#fff;background:' + (s.listening ? '#B3261E' : accent),
+      heardText: s.micErr ? s.micErr : s.heard.length ? 'I heard: ' + s.heard[0] : '', typeInstead: () => this.setState({ forceType: true, micErr: '' }),
+      checked: s.checked, notChecked: !s.checked, cantCheck: !canCheck, check, next,
+      fbStyle: 'padding:16px 24px 32px;display:flex;flex-direction:column;gap:10px;min-height:112px;box-sizing:border-box;justify-content:center;background:' + (!s.checked ? 'transparent' : ok ? '#E3F3EA' : '#FBE4E1') + ';color:' + (!s.checked ? INK : ok ? '#14532D' : '#7A1712'),
+      fbTitle, fbSub: ok ? fbPair : 'Answer: ' + fbPair,
+      checkBtn: 'border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px;background:' + (canCheck ? accent : '#D9D4C7') + ';color:' + (canCheck ? '#fff' : '#5B6478'),
+      nextBtn: 'border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px;color:#fff;background:' + (ok ? '#1F7A4D' : '#B3261E'),
+      score: Q ? Q.right + ' / ' + total : '', scoreText: pct + '% correct. ' + (pct >= 80 ? 'Strong. These are moving up your review ladder.' : 'Missed ones come back sooner in your daily review.'),
+      hasMissed: missed.length > 0, missed, retryMissed
+    };
+  }
+}
+</script>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});</script>
+</body>
+</html>
