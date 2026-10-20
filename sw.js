@@ -1,5 +1,5 @@
-const C='allez-v3';
-const FILES=['./','index.html','sentences.html','dc.js','manifest.webmanifest','icon-192.png','icon-512.png','test.html'];
+const C='allez-v4';
+const FILES=['./','index.html','sentences.html','dc.js','profiles.js','manifest.webmanifest','icon-192.png','icon-512.png','test.html'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;

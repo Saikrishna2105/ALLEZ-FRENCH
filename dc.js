@@ -123,5 +123,6 @@
     try { inst.componentDidMount && inst.componentDidMount(); } catch (e) { console.error(e); }
     window.addEventListener('pagehide', () => { try { inst.componentWillUnmount && inst.componentWillUnmount(); } catch (e) {} });
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+  window.__dcStart = boot;
+  if (window.__dcHold) { /* waiting for a profile */ } else if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
