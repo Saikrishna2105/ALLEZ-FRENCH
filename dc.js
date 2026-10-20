@@ -109,7 +109,7 @@
       const vals = inst.renderVals();
       const scope = Object.assign({}, vals);
       const html = kids(tpl, scope);
-      const tmp = document.createElement('div'); tmp.innerHTML = html;
+      const tmp = document.createElement('div'); tmp.innerHTML = html; if (root.getAttribute('style')) tmp.setAttribute('style', root.getAttribute('style'));
       sync(root, tmp);
     }
     inst._rt = { update(prevState) { render(); try { inst.componentDidUpdate && inst.componentDidUpdate(inst.props, prevState); } catch (e) { console.error(e); } } };
