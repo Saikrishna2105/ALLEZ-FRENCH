@@ -14,7 +14,7 @@
     Storage.prototype.removeItem = function (k) { return r.call(this, this === ls ? map(k) : k); }; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
-  function start(id) { setActive(id); ns(id); var me = list().filter(function (p) { return p.id === id; })[0]; window.__profile = me;
+  function start(id) { setActive(id); if (!/(index\.html)?$/.test(location.pathname) || /sentences\.html$/.test(location.pathname)) { location.replace('index.html'); return; } ns(id); var me = list().filter(function (p) { return p.id === id; })[0]; window.__profile = me;
     var ov = document.getElementById('pf-ov'); if (ov) ov.remove(); var hd = document.getElementById('pf-hide'); if (hd) hd.remove(); chip(me); if (window.__dcStart) window.__dcStart(); }
   function chip(me) {
     var b = document.createElement('button'); b.setAttribute('aria-label', 'Switch profile. Now: ' + me.name);
