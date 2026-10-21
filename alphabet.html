@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>French Alphabet</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E1A2B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>html,body{margin:0;height:100%;background:#0E1A2B}</style>
+<script src="profiles.js"></script>
+<script src="dc.js"></script>
+<script src="nav.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #C6F36B;outline-offset:2px}
+button:disabled{cursor:default}
+input::placeholder{color:#A9B4C6}
+</style>
+</helmet>
+<div style="width:100%;max-width:520px;margin:0 auto;height:100vh;height:100dvh;box-sizing:border-box;display:flex;flex-direction:column;background:#0E1A2B;color:#F3F1EA;font-family:'DM Sans',system-ui,sans-serif;overflow:hidden;position:relative">
+
+<!-- HOME -->
+<sc-if value="{{isHome}}" hint-placeholder-val="{{ true }}">
+<div style="flex:1;min-height:0;overflow-y:auto;padding:56px 20px 28px;display:flex;flex-direction:column;gap:16px">
+<div>
+<div style="font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#C6F36B">Chapter three</div>
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:36px;line-height:1.05;margin-top:6px">The alphabet</div>
+<div style="font-size:15px;color:#A9B4C6;margin-top:8px;line-height:1.4">You need it to spell your name, your email and your address. Ask: <b style="color:#F3F1EA">Comment ça s’écrit ?</b> (How do you spell it?)</div>
+</div>
+
+<div style="background:#172A44;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;flex:none">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:72px;height:72px;border-radius:16px;background:#C6F36B;color:#0E1A2B;font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:44px;display:flex;align-items:center;justify-content:center;flex:none">{{selCh}}</div>
+<div style="flex:1;min-width:0">
+<div style="font-weight:700;font-size:18px">Sounds like “{{selSound}}”</div>
+<div style="font-size:14px;color:#A9B4C6;margin-top:2px">{{selWord}} · {{selEn}}</div>
+</div>
+</div>
+<div style="display:flex;gap:8px">
+<button onClick="{{hearLetter}}" style="flex:1;min-height:48px;border:0;border-radius:12px;background:#C6F36B;color:#0E1A2B;font-weight:700;font-size:15px">Hear the letter</button>
+<button onClick="{{hearWord}}" style="flex:1;min-height:48px;border:2px solid #C6F36B;border-radius:12px;background:transparent;color:#C6F36B;font-weight:700;font-size:15px">Hear the word</button>
+</div>
+<button onClick="{{toggleEx}}" aria-expanded="{{exOpen}}" style="min-height:44px;border:0;background:transparent;color:#C6F36B;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px">{{exLabel}}</button>
+<sc-if value="{{exOpen}}" hint-placeholder-val="{{ false }}">
+<div style="background:#0E1A2B;border-radius:12px;overflow:hidden;flex:none">
+<sc-for list="{{exs}}" as="x" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:8px;padding:4px 4px 4px 14px;border-bottom:1px solid #172A44">
+<span style="flex:1;min-width:0"><span style="display:block;font-weight:700;font-size:16px">{{x.fr}}</span><span style="display:block;font-size:13px;color:#A9B4C6">{{x.en}}</span></span>
+<button onClick="{{x.say}}" aria-label="Hear {{x.fr}}" style="width:44px;height:44px;border:0;background:transparent;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:space-between">
+<div style="font-size:13px;font-weight:700;color:#A9B4C6">Tap a letter to hear it</div>
+<button onClick="{{playAll}}" style="min-height:40px;padding:0 14px;border:1.5px solid #3A4F70;border-radius:12px;background:transparent;color:#F3F1EA;font-weight:700;font-size:13px">{{playAllLabel}}</button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;flex:none">
+<sc-for list="{{letters}}" as="l" hint-placeholder-count="26">
+<button onClick="{{l.pick}}" aria-label="Letter {{l.ch}}" style="{{l.style}}"><span style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px;line-height:1">{{l.ch}}</span><span style="display:block;font-size:11px;margin-top:3px;opacity:.75">{{l.hint}}</span></button>
+</sc-for>
+</div>
+
+<div style="font-size:13px;font-weight:700;color:#A9B4C6;margin-top:4px">Accents change the spelling</div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;flex:none">
+<sc-for list="{{accs}}" as="a" hint-placeholder-count="8">
+<button onClick="{{a.say}}" aria-label="{{a.name}}" style="min-height:64px;border:0;border-radius:12px;background:#172A44;color:#F3F1EA;padding:6px"><span style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px;color:#C6F36B">{{a.ch}}</span><span style="display:block;font-size:11px;color:#A9B4C6;margin-top:2px">{{a.name}}</span></button>
+</sc-for>
+</div>
+
+<div style="background:#172A44;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;flex:none">
+<div style="font-weight:700;font-size:16px;color:#C6F36B">Spell your name</div>
+<input type="text" value="{{name}}" onChange="{{onName}}" aria-label="Your name" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="Type a name or a word" style="min-height:52px;box-sizing:border-box;width:100%;border-radius:12px;padding:0 14px;font-size:17px;font-family:inherit;color:#F3F1EA;background:#0E1A2B;border:2px solid #3A4F70">
+<sc-if value="{{hasName}}" hint-placeholder-val="{{ false }}"><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:22px;letter-spacing:0.08em;word-break:break-word">{{nameLetters}}</div></sc-if>
+<button onClick="{{spellName}}" style="min-height:48px;border:0;border-radius:12px;background:#C6F36B;color:#0E1A2B;font-weight:700;font-size:15px">Hear it spelled in French</button>
+</div>
+
+<div style="font-size:13px;font-weight:700;color:#A9B4C6;margin-top:4px">Practice</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{modes}}" as="m" hint-placeholder-count="3">
+<button onClick="{{m.open}}" style="display:flex;align-items:center;gap:14px;text-align:left;background:#172A44;border:2px solid {{m.border}};border-radius:16px;padding:14px;color:#F3F1EA;width:100%">
+<span style="width:40px;height:40px;border-radius:12px;flex:none;display:flex;align-items:center;justify-content:center;font-size:20px;background:{{m.bg}}">{{m.icon}}</span>
+<span style="flex:1;min-width:0"><span style="display:block;font-weight:700;font-size:17px">{{m.title}}</span><span style="display:block;font-size:13px;color:#A9B4C6;margin-top:2px">{{m.sub}}</span></span>
+<span style="font-size:13px;font-weight:700;color:{{m.tagColor}}">{{m.tag}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- PLAY -->
+<sc-if value="{{isPlay}}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column">
+<div style="padding:52px 20px 8px;display:flex;align-items:center;gap:12px">
+<button onClick="{{quit}}" aria-label="Quit" style="width:44px;height:44px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F3F1EA" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+<div style="flex:1;height:12px;background:#172A44;border-radius:999px;overflow:hidden"><div style="{{bar}}"></div></div>
+<div style="font-size:14px;font-weight:700;min-width:46px;text-align:right">{{pos}}</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:12px 24px;display:flex;flex-direction:column;gap:18px">
+<div>
+<div style="font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#C6F36B">{{ex.label}}</div>
+<div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+<sc-if value="{{showText}}" hint-placeholder-val="{{ true }}"><div style="flex:1;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:24px;line-height:1.2">{{promptText}}</div></sc-if>
+<sc-if value="{{hearOnly}}" hint-placeholder-val="{{ false }}"><div style="flex:1;font-size:15px;color:#A9B4C6">{{hearHint}}</div></sc-if>
+<sc-if value="{{hasSpeaker}}" hint-placeholder-val="{{ false }}">
+<button onClick="{{replay}}" aria-label="Hear it again" style="width:56px;height:56px;flex:none;border:2px solid #C6F36B;background:#172A44;border-radius:16px;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+</sc-if>
+</div>
+</div>
+
+<sc-if value="{{isLetter}}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+<sc-for list="{{opts}}" as="o" hint-placeholder-count="4"><button onClick="{{o.pick}}" style="{{o.style}}">{{o.text}}</button></sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{isBuild}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="min-height:80px;border-top:2px solid #C6F36B;border-bottom:2px solid #C6F36B;padding:14px 0;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start">
+<sc-for list="{{builtTiles}}" as="b" hint-placeholder-count="2"><button onClick="{{b.remove}}" style="{{b.style}}">{{b.text}}</button></sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{bankTiles}}" as="t" hint-placeholder-count="6"><button onClick="{{t.pick}}" style="{{t.style}}">{{t.text}}</button></sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isType}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<input type="text" value="{{typed}}" onChange="{{onType}}" disabled="{{checked}}" aria-label="Write the word" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="Write the word" style="{{inputStyle}}">
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{accents}}" as="a" hint-placeholder-count="12"><button onClick="{{a.add}}" aria-label="Add {{a.ch}}" style="min-width:44px;min-height:44px;border:1.5px solid #3A4F70;background:#172A44;border-radius:10px;font-size:18px;color:#F3F1EA">{{a.ch}}</button></sc-for>
+</div>
+</div>
+</sc-if>
+</div>
+
+<div style="{{fbStyle}}">
+<sc-if value="{{checked}}" hint-placeholder-val="{{ false }}"><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:20px;line-height:1.2">{{fbTitle}}</div><div style="font-size:14px;line-height:1.35">{{fbSub}}</div></sc-if>
+<sc-if value="{{notChecked}}" hint-placeholder-val="{{ true }}"><button onClick="{{check}}" disabled="{{cantCheck}}" style="{{checkBtn}}">Check</button></sc-if>
+<sc-if value="{{checked}}" hint-placeholder-val="{{ false }}"><button onClick="{{next}}" style="{{nextBtn}}">Continue</button></sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- RESULT -->
+<sc-if value="{{isResult}}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;display:flex;flex-direction:column;padding:96px 24px 24px;gap:20px">
+<div>
+<div style="font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#C6F36B">{{modeTitle}}</div>
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:44px;line-height:1.05;margin-top:8px">Bravo !</div>
+<div style="font-size:16px;color:#A9B4C6;margin-top:10px;line-height:1.4">{{resultText}}</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<div style="background:#172A44;border-radius:14px;padding:14px"><div style="font-size:12px;color:#A9B4C6;font-weight:700">Questions</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:30px">{{resTotal}}</div></div>
+<div style="background:#172A44;border-radius:14px;padding:14px"><div style="font-size:12px;color:#A9B4C6;font-weight:700">Mistakes</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:30px">{{resMistakes}}</div></div>
+</div>
+<div style="flex:1"></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<button onClick="{{again}}" style="background:#C6F36B;color:#0E1A2B;border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px">Play again</button>
+<button onClick="{{goHome}}" style="background:transparent;color:#F3F1EA;border:1.5px solid #F3F1EA;border-radius:14px;min-height:52px;font-weight:700;font-size:16px">Back to the alphabet</button>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+// letter | sound hint | spoken name | example word | English
+const LROWS = `A|ah|ah|ami|friend
+B|bay|bé|banane|banana
+C|say|cé|café|coffee
+D|day|dé|dîner|dinner
+E|uh|eu|école|school
+F|eff|effe|fromage|cheese
+G|zhay|jé|gare|station
+H|ash|ache|hôtel|hotel
+I|ee|i|île|island
+J|zhee|ji|jour|day
+K|kah|ka|kilo|kilo
+L|ell|elle|lait|milk
+M|emm|emme|maison|house
+N|enn|enne|nuit|night
+O|oh|o|orange|orange
+P|pay|pé|pain|bread
+Q|kew|ku|question|question
+R|air|erre|rue|street
+S|ess|esse|salade|salad
+T|tay|té|table|table
+U|ew|u|une|one (f.)
+V|vay|vé|ville|city
+W|doo-bluh-vay|double vé|week-end|weekend
+X|eeks|ix|taxi|taxi
+Y|ee-grek|i grec|yaourt|yoghurt
+Z|zed|zède|zéro|zero`;
+const EXR = `A:ami|friend;avion|plane;arbre|tree;août|August
+B:banane|banana;bonjour|hello;bleu|blue;boulangerie|bakery
+C:café|coffee;chat|cat;chien|dog;cinéma|cinema
+D:dîner|dinner;demain|tomorrow;deux|two;dimanche|Sunday
+E:école|school;eau|water;enfant|child;été|summer
+F:fromage|cheese;famille|family;fleur|flower;frère|brother
+G:gare|station;garçon|boy;gâteau|cake;gauche|left
+H:hôtel|hotel;hiver|winter;heure|hour;hôpital|hospital
+I:île|island;ici|here;idée|idea;image|picture
+J:jour|day;jardin|garden;jaune|yellow;jeudi|Thursday
+K:kilo|kilo;kiwi|kiwi;karaoké|karaoke;kilomètre|kilometre
+L:lait|milk;livre|book;lundi|Monday;lune|moon
+M:maison|house;mère|mother;merci|thank you;musique|music
+N:nuit|night;nom|name;noir|black;neige|snow
+O:orange|orange;œuf|egg;ouvert|open;oiseau|bird
+P:pomme|apple;pain|bread;père|father;plage|beach
+Q:question|question;quatre|four;quand|when;qui|who
+R:rue|street;rouge|red;restaurant|restaurant;robe|dress
+S:salade|salad;soleil|sun;sœur|sister;samedi|Saturday
+T:table|table;train|train;thé|tea;travail|work
+U:une|one (f.);usine|factory;utile|useful;université|university
+V:ville|city;voiture|car;vin|wine;vendredi|Friday
+W:week-end|weekend;wagon|carriage;wifi|Wi-Fi;whisky|whisky
+X:taxi|taxi;xylophone|xylophone;examen|exam;excusez-moi|excuse me
+Y:yaourt|yoghurt;yeux|eyes;yoga|yoga;mayonnaise|mayonnaise
+Z:zéro|zero;zoo|zoo;zèbre|zebra;zone|zone`;
+const EXM = {}; EXR.split('\n').forEach((l) => { EXM[l[0]] = l.slice(2).split(';').map((x) => { const f = x.split('|'); return { fr: f[0], en: f[1] }; }); });
+const LET = LROWS.split('\n').map((l) => { const f = l.split('|'); return { ch: f[0], hint: f[1], say: f[2], word: f[3], en: f[4] }; });
+const ACC = [['é', 'accent aigu', 'é accent aigu'], ['è', 'accent grave', 'è accent grave'], ['ê', 'circonflexe', 'ê accent circonflexe'], ['à', 'a grave', 'a accent grave'], ['â', 'a circonflexe', 'a accent circonflexe'], ['ç', 'cédille', 'ç cédille'], ['ô', 'o circonflexe', 'o accent circonflexe'], ['ï', 'tréma', 'i tréma']];
+const ACCSAY = { 'é': 'é accent aigu', 'è': 'è accent grave', 'ê': 'e accent circonflexe', 'à': 'a accent grave', 'â': 'a accent circonflexe', 'ç': 'ç cédille', 'ô': 'o accent circonflexe', 'î': 'i accent circonflexe', 'û': 'u accent circonflexe', 'ù': 'u accent grave', 'ï': 'i tréma', 'ë': 'e tréma', '-': 'trait d’union', '’': 'apostrophe' };
+const WORDS = `bonjour|hello
+merci|thank you
+famille|family
+maison|house
+café|coffee
+école|school
+français|French
+Paris|Paris
+pomme|apple
+fromage|cheese
+jardin|garden
+voiture|car
+plage|beach
+chat|cat
+chien|dog
+lundi|Monday
+hôtel|hotel
+garçon|boy
+soleil|sun
+enchanté|nice to meet you
+téléphone|phone
+août|August
+frère|brother
+sœur|sister`.split('\n').map((l) => { const f = l.split('|'); return { fr: f[0], en: f[1] }; });
+const CONF = [['E', 'I', 'G', 'J'], ['B', 'P', 'D', 'T', 'V'], ['M', 'N', 'S', 'F', 'L'], ['K', 'Q', 'C'], ['U', 'V', 'W', 'Y', 'X', 'Z'], ['A', 'H', 'R', 'O']];
+const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+const norm = (s) => String(s).toLowerCase().normalize('NFC').replace(/’/g, "'").trim();
+const plain = (s) => norm(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/œ/g, 'oe');
+const canSpeak = () => typeof speechSynthesis !== 'undefined' && typeof SpeechSynthesisUtterance !== 'undefined';
+const VOICES = { l: [] }, KEEP = []; let ttsAudio = null;
+const loadVoices = () => { try { VOICES.l = speechSynthesis.getVoices() || []; } catch (e) {} };
+try { loadVoices(); if (speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged', loadVoices); } catch (e) {}
+const vl = (v) => String(v.lang || '').toLowerCase().replace('_', '-');
+const pickVoice = (lang) => { loadVoices(); const L = lang.toLowerCase().replace('_', '-'); const fr = VOICES.l.filter((v) => vl(v).slice(0, 2) === L.slice(0, 2)); return fr.find((v) => vl(v) === L) || fr[0] || null; };
+const sayText = (text, lang, rate, cb) => {
+  let done = false, started = false, timer = null, fb = null;
+  const fin = () => { if (done) return; done = true; clearTimeout(timer); clearTimeout(fb); if (cb) cb(); };
+  const viaAudio = () => { if (done) return; try { if (ttsAudio) ttsAudio.pause(); const a = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + lang.slice(0, 2) + '&q=' + encodeURIComponent(text)); ttsAudio = a; a.onended = fin; a.onerror = fin; const pr = a.play(); if (pr && pr.catch) pr.catch(fin); } catch (e) { fin(); } };
+  try {
+    timer = setTimeout(fin, 4000 + text.length * 140);
+    if (!canSpeak()) { viaAudio(); return; }
+    if (ttsAudio) { try { ttsAudio.pause(); } catch (e) {} }
+    const u = new SpeechSynthesisUtterance(text); u.lang = lang; u.rate = rate || 0.9; u.volume = 1;
+    const v = pickVoice(lang); if (v) u.voice = v;
+    KEEP.push(u); if (KEEP.length > 8) KEEP.shift();
+    u.onstart = () => { started = true; };
+    u.onend = fin; u.onerror = () => { if (!started) viaAudio(); else fin(); };
+    if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+    try { speechSynthesis.resume(); } catch (e) {}
+    speechSynthesis.speak(u);
+    fb = setTimeout(() => { if (!started && !done) { try { speechSynthesis.cancel(); } catch (e) {} viaAudio(); } }, 1800);
+  } catch (e) { fin(); }
+};
+let TOK = 0;
+const stopSpeech = () => { TOK++; try { if (canSpeak()) speechSynthesis.cancel(); } catch (e) {} try { if (ttsAudio) ttsAudio.pause(); } catch (e) {} };
+const say = (t, rate) => { TOK++; sayText(t, 'fr-FR', rate || 0.8); };
+const letterSay = (ch) => { const c = ch.toUpperCase(); const f = LET.filter((x) => x.ch === c)[0]; return f ? f.say : ACCSAY[ch.toLowerCase()] || ch; };
+const spell = (word, cb) => {
+  const tok = ++TOK; const arr = word.split('').map(letterSay); let k = 0;
+  const step = () => { if (tok !== TOK) return; if (k >= arr.length) { if (cb) cb(); return; } sayText(arr[k++], 'fr-FR', 0.7, () => setTimeout(step, 220)); };
+  step();
+};
+const MODES = [
+  { id: 'letter', icon: '👂', title: 'Hear a letter', sub: 'Hear a letter, tap the right one', n: 12 },
+  { id: 'build', icon: '🧱', title: 'Spell the word', sub: 'See the meaning, build the word letter by letter', n: 8 },
+  { id: 'dictate', icon: '✍️', title: 'Spelled dictation', sub: 'Hear the letters, write the word', n: 8 }
+];
+const mk = (mode) => {
+  if (mode === 'letter') {
+    const L = LET[Math.floor(Math.random() * 26)];
+    const grp = CONF.filter((g) => g.indexOf(L.ch) >= 0); const pool = shuffle((grp.length ? grp[Math.floor(Math.random() * grp.length)] : []).filter((x) => x !== L.ch));
+    const extra = pool.concat(shuffle(LET.map((x) => x.ch).filter((x) => x !== L.ch && pool.indexOf(x) < 0))).slice(0, 3);
+    return { t: 'letter', label: 'Which letter?', say: L.say, answer: L.ch, options: shuffle([L.ch].concat(extra)), word: L.ch, en: L.hint };
+  }
+  const w = WORDS[Math.floor(Math.random() * WORDS.length)];
+  if (mode === 'build') return { t: 'build', label: 'Spell the word', prompt: w.en, say: w.fr, answer: w.fr, tiles: shuffle(w.fr.split('')), word: w.fr, en: w.en };
+  return { t: 'dictate', label: 'Spelled dictation', say: w.fr, spellIt: true, answer: w.fr, word: w.fr, en: w.en };
+};
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    let done = {};
+    try { done = JSON.parse(localStorage.getItem('allez_alpha_v1') || '{}') || {}; } catch (e) { done = {}; }
+    this.state = { screen: 'home', sel: 0, name: '', mode: 'letter', sess: null, pick: null, built: [], typed: '', checked: false, correct: false, almost: false, done, playing: false, exOpen: false };
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.done !== this.state.done) { try { localStorage.setItem('allez_alpha_v1', JSON.stringify(this.state.done)); } catch (e) {} }
+  }
+  flushTime() {
+    if (!(this._pend > 0)) return; const add = this._pend; this._pend = 0;
+    try {
+      const o = JSON.parse(localStorage.getItem('allez_time_v1') || '{}') || {}; o.d = o.d || {}; const t = new Date();
+      const k = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
+      o.d[k] = (o.d[k] || 0) + add; localStorage.setItem('allez_time_v1', JSON.stringify(o));
+    } catch (e) {}
+  }
+  componentDidMount() {
+    this._act = Date.now(); this._pend = 0; this._mark = () => { this._act = Date.now(); };
+    try { ['pointerdown', 'touchstart', 'input'].forEach((e) => document.addEventListener(e, this._mark, true)); document.addEventListener('scroll', this._mark, true); } catch (e) {}
+    this._iv = setInterval(() => {
+      let vis = true; try { vis = document.visibilityState !== 'hidden'; } catch (e) {}
+      if (vis && Date.now() - this._act < 60000) this._pend += 1;
+      if (this._pend >= 5) this.flushTime();
+    }, 1000);
+  }
+  componentWillUnmount() {
+    stopSpeech();
+    try { clearInterval(this._iv); this.flushTime(); ['pointerdown', 'touchstart', 'input'].forEach((e) => document.removeEventListener(e, this._mark, true)); document.removeEventListener('scroll', this._mark, true); } catch (e) {}
+  }
+  renderVals() {
+    const s = this.state; const cur = LET[s.sel];
+    const reset = { pick: null, built: [], typed: '', checked: false, correct: false, almost: false };
+    const goHome = () => { stopSpeech(); this.setState({ screen: 'home', sess: null, playing: false }); };
+    const letters = LET.map((l, i) => ({ ch: l.ch, hint: l.hint,
+      style: 'min-height:62px;border-radius:12px;padding:6px 2px;color:' + (i === s.sel ? '#0E1A2B' : '#F3F1EA') + ';background:' + (i === s.sel ? '#C6F36B' : '#172A44') + ';border:2px solid ' + (i === s.sel ? '#C6F36B' : '#172A44'),
+      pick: () => { this.setState({ sel: i, playing: false }); say(l.say, 0.7); } }));
+    const accs = ACC.map((a) => ({ ch: a[0], name: a[1], say: () => say(a[2], 0.8) }));
+    const modes = MODES.map((m) => { const d = s.done[m.id] !== undefined; return { title: m.title, sub: m.sub, icon: m.icon, tag: d ? 'Cleared' : 'Play', tagColor: d ? '#7FE0A8' : '#C6F36B', border: d ? '#7FE0A8' : '#172A44', bg: d ? '#7FE0A8' : '#C6F36B', open: () => this.start(m.id) }; });
+    const playAll = () => {
+      if (this.state.playing) { stopSpeech(); this.setState({ playing: false }); return; }
+      const tok = ++TOK; this.setState({ playing: true }); let k = 0;
+      const step = () => { if (tok !== TOK) return; if (k >= 26) { this.setState({ playing: false }); return; } this.setState({ sel: k }); const l = LET[k++]; sayText(l.ch + ', ' + l.say, 'fr-FR', 0.75, () => setTimeout(step, 350)); };
+      step();
+    };
+    const sess = s.sess;
+    const ex = sess && sess.queue.length ? sess.queue[0] : { t: 'letter', label: '', prompt: '', say: '', answer: '', tiles: [], options: [], word: '', en: '' };
+    const isBuild = ex.t === 'build';
+    const tileBase = 'min-width:46px;min-height:46px;padding:0 14px;border-radius:12px;font-size:20px;font-weight:700;color:#0E1A2B;';
+    const bankTiles = isBuild ? ex.tiles.map((t, i) => { const used = s.built.indexOf(i) >= 0;
+      return { text: t, style: tileBase + 'border:0;border-bottom:3px solid #8A97AD;background:' + (used ? '#172A44' : '#F3F1EA') + ';' + (used ? 'color:#172A44;border-bottom-color:#172A44;' : ''), pick: () => { if (!used && !this.state.checked) this.setState({ built: this.state.built.concat([i]) }); } }; }) : [];
+    const builtTiles = isBuild ? s.built.map((ti, pos) => ({ text: ex.tiles[ti], style: tileBase + 'border:0;border-bottom:3px solid ' + (s.checked ? (s.correct ? '#7FE0A8' : '#F28B82') : '#8A97AD') + ';background:#F3F1EA;', remove: () => { if (!this.state.checked) this.setState({ built: this.state.built.filter((_, p) => p !== pos) }); } })) : [];
+    const opts = ex.t === 'letter' ? ex.options.map((t) => { const sel = s.pick === t, isAns = t === ex.answer; let bg = '#172A44', bd = '#3A4F70';
+      if (s.checked) { if (isAns) { bg = '#123D2B'; bd = '#7FE0A8'; } else if (sel) { bg = '#4A1D1D'; bd = '#F28B82'; } } else if (sel) { bg = '#26405F'; bd = '#C6F36B'; }
+      return { text: t, style: 'min-height:80px;border-radius:16px;font-family:Fraunces,Georgia,serif;font-size:38px;font-weight:700;color:#F3F1EA;background:' + bg + ';border:2px solid ' + bd, pick: () => { if (!this.state.checked) this.setState({ pick: t }); } }; }) : [];
+    const canCheck = isBuild ? s.built.length > 0 : ex.t === 'dictate' ? s.typed.trim().length > 0 : s.pick !== null;
+    const check = () => {
+      const st = this.state; const e = st.sess.queue[0]; let ok = false, almost = false;
+      if (e.t === 'build') ok = norm(st.built.map((i) => e.tiles[i]).join('')) === norm(e.answer);
+      else if (e.t === 'letter') ok = st.pick === e.answer;
+      else { ok = norm(st.typed) === norm(e.answer); almost = !ok && plain(st.typed) === plain(e.answer); }
+      const ss = Object.assign({}, st.sess); if (!ok) ss.wrong += 1;
+      this.setState({ checked: true, correct: ok, almost, sess: ss });
+      if (e.t === 'letter') say(e.say, 0.7); else say(e.word, 0.8);
+    };
+    const next = () => {
+      const st = this.state; const ss = Object.assign({}, st.sess); const e = ss.queue[0];
+      ss.queue = ss.queue.slice(1); if (!st.correct) ss.queue = ss.queue.concat([e]);
+      if (ss.queue.length === 0) { const prev = st.done[st.mode]; const done = Object.assign({}, st.done, { [st.mode]: prev === undefined ? ss.wrong : Math.min(prev, ss.wrong) }); this.setState(Object.assign({ screen: 'result', sess: ss, done }, reset)); return; }
+      this.setState(Object.assign({ sess: ss }, reset));
+      const ne = ss.queue[0]; setTimeout(() => this.playQ(ne), 250);
+    };
+    const ok = s.correct; const progressed = sess ? sess.total - new Set(sess.queue).size : 0;
+    const mdef = MODES.filter((m) => m.id === s.mode)[0] || MODES[0];
+    const ansShow = ex.t === 'letter' ? ex.answer : ex.answer;
+    return {
+      isHome: s.screen === 'home', isPlay: s.screen === 'play', isResult: s.screen === 'result', goHome,
+      exOpen: s.exOpen, exLabel: s.exOpen ? 'Hide examples ▴' : 'Examples ▾', toggleEx: () => this.setState({ exOpen: !this.state.exOpen }), exs: (EXM[cur.ch] || []).map((x) => ({ fr: x.fr, en: x.en, say: () => say(x.fr, 0.8) })),
+      selCh: cur.ch, selSound: cur.hint, selWord: cur.word, selEn: cur.en, hearLetter: () => say(cur.say, 0.7), hearWord: () => say(cur.word, 0.8),
+      letters, accs, playAll, playAllLabel: s.playing ? 'Stop' : 'Play A to Z', modes,
+      name: s.name, onName: (e) => this.setState({ name: e.target.value }), hasName: s.name.trim().length > 0, nameLetters: s.name.trim().toUpperCase().split('').join(' · '),
+      spellName: () => { const n = s.name.trim() || this.state.name.trim(); if (n) spell(n); },
+      quit: goHome, ex, bar: 'height:100%;border-radius:999px;background:#C6F36B;width:' + (sess ? Math.round((progressed / sess.total) * 100) : 0) + '%;transition:width .3s',
+      pos: sess ? Math.min(progressed + 1, sess.total) + '/' + sess.total : '',
+      showText: ex.t === 'build', promptText: ex.prompt, hearOnly: ex.t === 'letter' || ex.t === 'dictate', hasSpeaker: ex.t === 'letter' || ex.t === 'dictate',
+      hearHint: ex.t === 'letter' ? 'Tap the speaker, then pick the letter you hear.' : 'Tap the speaker. Write the word that was spelled.',
+      replay: () => this.playQ(ex), isLetter: ex.t === 'letter', opts, isBuild, bankTiles, builtTiles, isType: ex.t === 'dictate',
+      typed: s.typed, onType: (e) => this.setState({ typed: e.target.value }),
+      accents: ['é', 'è', 'ê', 'à', 'â', 'ç', 'ô', 'î', 'û', 'ù', 'ï', 'œ'].map((ch) => ({ ch, add: () => { if (!this.state.checked) this.setState({ typed: this.state.typed + ch }); } })),
+      inputStyle: 'min-height:56px;box-sizing:border-box;width:100%;border-radius:14px;padding:0 16px;font-size:19px;font-family:inherit;color:#F3F1EA;background:#172A44;border:2px solid ' + (s.checked ? (ok ? '#7FE0A8' : '#F28B82') : '#3A4F70'),
+      checked: s.checked, notChecked: !s.checked, cantCheck: !canCheck, check, next,
+      fbStyle: 'padding:16px 24px 24px;display:flex;flex-direction:column;gap:10px;min-height:112px;box-sizing:border-box;justify-content:center;background:' + (!s.checked ? 'transparent' : ok ? '#123D2B' : '#4A1D1D') + ';color:' + (!s.checked ? '#F3F1EA' : ok ? '#D8F7E6' : '#FFE1DE'),
+      fbTitle: ok ? 'Bien joué!' : s.almost ? 'Almost! Mind the accents.' : 'Not quite.', fbSub: ok ? (ex.t === 'letter' ? ex.answer + ' = “' + ex.en + '”' : ex.word + ' = ' + ex.en) : 'Answer: ' + ansShow,
+      checkBtn: 'border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px;background:' + (canCheck ? '#C6F36B' : '#26405F') + ';color:' + (canCheck ? '#0E1A2B' : '#A9B4C6'),
+      nextBtn: 'border:0;border-radius:14px;min-height:52px;font-weight:700;font-size:16px;color:#0E1A2B;background:' + (ok ? '#7FE0A8' : '#F28B82'),
+      modeTitle: mdef.title, resTotal: sess ? sess.total : 0, resMistakes: sess ? sess.wrong : 0,
+      resultText: sess && sess.wrong === 0 ? 'Perfect run, no mistakes.' : 'The ones you missed came back until you got them right.',
+      again: () => this.start(this.state.mode)
+    };
+  }
+  playQ(e) { if (!e) return; if (e.t === 'dictate') spell(e.word); else if (e.t === 'letter') say(e.say, 0.7); }
+  start(mode) {
+    stopSpeech(); const m = MODES.filter((x) => x.id === mode)[0];
+    const items = []; for (let i = 0; i < m.n; i++) items.push(mk(mode));
+    this.setState({ screen: 'play', mode, playing: false, sess: { queue: items, total: items.length, wrong: 0 }, pick: null, built: [], typed: '', checked: false, correct: false, almost: false });
+    setTimeout(() => this.playQ(items[0]), 300);
+  }
+}
+</script>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});</script>
+</body>
+</html>

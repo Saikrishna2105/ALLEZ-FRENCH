@@ -1,6 +1,6 @@
 /* Profiles: "Who's learning?" picker. Each profile has its own saved progress on this device. */
 (function () {
-  var PK = 'allez_profiles', AK = 'allez_active', KEYS = ['allez_vocab_v3', 'allez_sent_v1', 'allez_time_v1'];
+  var PK = 'allez_profiles', AK = 'allez_active', KEYS = ['allez_vocab_v3', 'allez_sent_v1', 'allez_time_v1', 'allez_alpha_v1'];
   var AV = [['🦊', '#F4A261'], ['🐼', '#8D99AE'], ['🐸', '#7FC97F'], ['🐙', '#C77DFF'], ['🦄', '#F28BC0'], ['🐯', '#F6BD60'], ['🐧', '#4EA8DE'], ['🦁', '#E9C46A'], ['🐰', '#F5CAC3'], ['🐳', '#48CAE4']];
   var ls = window.localStorage, rawGet = ls.getItem.bind(ls), rawSet = ls.setItem.bind(ls), rawRem = ls.removeItem.bind(ls);
   function list() { try { return JSON.parse(rawGet(PK) || '[]') || []; } catch (e) { return []; } }
@@ -14,7 +14,7 @@
     Storage.prototype.removeItem = function (k) { return r.call(this, this === ls ? map(k) : k); }; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
-  function start(id) { setActive(id); if (!/(index\.html)?$/.test(location.pathname) || /sentences\.html$/.test(location.pathname)) { location.replace('index.html'); return; } ns(id); var me = list().filter(function (p) { return p.id === id; })[0]; window.__profile = me;
+  function start(id) { setActive(id); if (!/(index\.html|\/)$/.test(location.pathname)) { location.replace('index.html'); return; } ns(id); var me = list().filter(function (p) { return p.id === id; })[0]; window.__profile = me;
     var ov = document.getElementById('pf-ov'); if (ov) ov.remove(); var hd = document.getElementById('pf-hide'); if (hd) hd.remove(); chip(me); if (window.__dcStart) window.__dcStart(); }
   function chip(me) {
     var b = document.createElement('button'); b.setAttribute('aria-label', 'Switch profile. Now: ' + me.name);
