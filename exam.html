@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>French A1 Mock Exam</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E1A2B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<style>
+/* Exam-only additions */
+.doc { background: #F7F4EE; color: #14213D; border-radius: 12px; padding: 14px 16px; white-space: pre-line; line-height: 1.5; font-size: 15.5px; }
+.doc.poster { text-align: center; font-weight: 500; border: 3px double #14213D; }
+.doc.ad { border-left: 6px solid #E8B23A; }
+.doc.menu { font-family: 'Fraunces', Georgia, serif; text-align: center; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 13px; font-weight: 700; color: #A9B4C6; }
+.field input, textarea { min-height: 46px; border-radius: 12px; border: 2px solid #3A4F70; background: #172A44; color: #F3F1EA; font-size: 16px; padding: 8px 12px; font-family: inherit; width: 100%; }
+textarea { min-height: 170px; line-height: 1.45; resize: vertical; }
+.timer { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; background: #172A44; border-radius: 999px; padding: 6px 12px; font-size: 14px; }
+.timer.low { background: #4A1D1D; color: #F28B82; }
+.qrow { display: flex; flex-direction: column; gap: 8px; }
+.qrow .opt { min-height: 48px; font-size: 16px; }
+.score-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #22344F; font-weight: 700; }
+.rate { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.rate .chip { min-height: 36px; font-size: 13px; }
+</style>
+<script src="profiles.js"></script>
+<script src="nav.js"></script>
+</head>
+<body>
+<div id="app" aria-live="polite"></div>
+<script src="exam-data.js"></script>
+<script src="exam.js"></script>
+<script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});</script>
+</body>
+</html>

@@ -2,6 +2,7 @@
 (function () {
   var TABS = [['index.html', 'Words', '📚'], ['learn.html', 'Lessons', '🎓'], ['sentences.html', 'Sentences', '💬'], ['alphabet.html', 'Alphabet', '🔤']];
   var path = location.pathname.split('/').pop() || 'index.html';
+  if (path === 'exam.html') path = 'learn.html'; /* the exam belongs to the Lessons tab */
   var css = 'x-dc>div{height:calc(100vh - 64px)!important;height:calc(100dvh - 64px - env(safe-area-inset-bottom))!important}' +
     'html,body{background:#0E1A2B!important}' +
     '#tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;height:calc(64px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:#0B1422;border-top:1px solid #22344F;display:flex;justify-content:center}' +

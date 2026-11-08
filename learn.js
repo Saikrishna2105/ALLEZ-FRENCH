@@ -276,6 +276,8 @@
         <div class="muted" style="font-size:13px">A step counts as done from 60%. XP today: ${xp}. Every right answer here also counts for your streak.</div>
         ${nk ? `<button class="btn" data-act="open" data-key="${nk}">Continue: ${esc(itemOf(nk).title)}</button>` : '<div style="font-weight:700;color:#7FE0A8">Course complete. Bravo ! Keep reviewing words every day.</div>'}
       </div>
+      <a href="exam.html" class="card" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;border:2px solid #FFD58A">
+        <span style="font-size:34px">🏁</span><span style="flex:1"><span class="serif" style="display:block;font-size:19px">A1 mock exam</span><span class="muted" style="display:block;font-size:13px;margin-top:2px">Test yourself like the real DELF A1: listening, reading, writing, speaking.</span></span><span style="color:#FFD58A;font-weight:700">Go ›</span></a>
       <div style="display:flex;flex-direction:column;gap:10px">${steps}</div>
       <div class="card"><div class="serif" style="font-size:19px;margin-bottom:6px">What A1 means</div>
         <div class="muted" style="font-size:14px;line-height:1.45;margin-bottom:8px">A1 is the first level of the Common European Framework (CEFR), the scale used by the DELF exam. At the end of A1 you can:</div>
