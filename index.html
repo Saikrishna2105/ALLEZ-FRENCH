@@ -24,6 +24,10 @@ body{margin:0}
 button{font-family:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #2F5BEA;outline-offset:2px}
 button:disabled{cursor:default}
+@keyframes az-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+@keyframes az-pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+@keyframes az-fall{0%{transform:translateY(-12vh) rotate(0deg)}100%{transform:translateY(110vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.az-confetti{display:none}}
 </style>
 </helmet>
 <div style="width:100%;max-width:520px;margin:0 auto;height:100vh;height:100dvh;box-sizing:border-box;display:flex;flex-direction:column;background:#F7F4EE;color:#14213D;font-family:'DM Sans',system-ui,sans-serif;overflow:hidden;position:relative">
@@ -39,6 +43,27 @@ button:disabled{cursor:default}
 <div>
 <div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:30px;letter-spacing:-0.5px">French A1 vocabulary</div>
 <div style="font-size:14px;color:#5B6478;margin-top:4px">631 entries: 513 words in 15 topics, plus 118 verbs with all their forms.</div>
+</div>
+
+<!-- TODAY: streak, XP and the one-tap daily lesson -->
+<div style="background:#14213D;color:#F7F4EE;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 6px 18px rgba(20,33,61,0.25)">
+<div style="display:flex;align-items:center;gap:12px">
+<span aria-hidden="true" style="{{flameStyle}}">🔥</span>
+<div style="flex:1;min-width:0">
+<div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:22px;line-height:1.1">{{streakTitle}}</div>
+<div style="font-size:13px;opacity:0.85;margin-top:2px">{{streakSub}}</div>
+</div>
+<div style="text-align:right;flex:none">
+<div style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:#C6F36B">LEVEL {{level}}</div>
+<div style="font-weight:700;font-size:17px;font-variant-numeric:tabular-nums">{{xpTotal}} XP</div>
+</div>
+</div>
+<div>
+<div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;opacity:0.9;margin-bottom:6px"><span>Today's goal</span><span>{{xpTodayText}}</span></div>
+<div style="height:10px;background:rgba(247,244,238,0.2);border-radius:999px;overflow:hidden"><div style="{{xpGoalBar}}"></div></div>
+</div>
+<button onClick="{{startLesson}}" style="{{lessonBtn}}">{{lessonLabel}}</button>
+<div style="font-size:12.5px;opacity:0.8;text-align:center;margin-top:-4px">{{lessonSub}}</div>
 </div>
 
 <a href="sentences.html" style="display:flex;align-items:center;gap:12px;background:#14213D;color:#F7F4EE;border-radius:18px;padding:16px;text-decoration:none;min-height:44px">
@@ -281,7 +306,11 @@ button:disabled{cursor:default}
 </div>
 <div style="flex:1;min-height:0;overflow-y:auto;padding:12px 24px;display:flex;flex-direction:column;gap:16px">
 <div>
-<div style="font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#5B6478">{{qLabel}}</div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+<sc-if value="{{isNewQ}}" hint-placeholder-val="{{ false }}"><span style="background:#C6F36B;color:#14213D;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;letter-spacing:0.06em">NEW WORD</span></sc-if>
+<span style="font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#5B6478">{{qLabel}}</span>
+<sc-if value="{{showCombo}}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto;background:#FFE8CC;color:#9A3412;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:700;animation:az-pop .35s ease-out">🔥 {{combo}} in a row</span></sc-if>
+</div>
 <div style="display:flex;align-items:center;gap:10px;margin-top:8px;min-height:60px">
 <sc-if value="{{showPrompt}}" hint-placeholder-val="{{ true }}"><div style="flex:1;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:{{promptSize}}px;line-height:1.15">{{promptText}}</div></sc-if>
 <sc-if value="{{voiceQ}}" hint-placeholder-val="{{ false }}"><div style="flex:1;font-size:15px;color:#5B6478">Tap the speaker to hear it again.</div></sc-if>
@@ -341,11 +370,22 @@ button:disabled{cursor:default}
 <!-- RESULT -->
 <sc-if value="{{isResult}}" hint-placeholder-val="{{ false }}">
 <div style="flex:1;min-height:0;display:flex;flex-direction:column">
+<sc-if value="{{confetti}}" hint-placeholder-val="{{ false }}">
+<div class="az-confetti" aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:6">
+<sc-for list="{{confettiBits}}" as="c" hint-placeholder-count="24"><span style="{{c.style}}">{{c.ch}}</span></sc-for>
+</div>
+</sc-if>
 <div style="flex:1;min-height:0;overflow-y:auto;padding:72px 24px 12px;display:flex;flex-direction:column;gap:18px">
 <div>
-<div style="font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#5B6478">Quiz finished</div>
+<sc-if value="{{confetti}}" hint-placeholder-val="{{ false }}"><div aria-hidden="true" style="font-size:56px;line-height:1;margin-bottom:8px;animation:az-pop .5s ease-out">🎉</div></sc-if>
+<div style="font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#5B6478">{{resultKicker}}</div>
 <div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:44px;line-height:1.05;margin-top:6px">{{score}}</div>
 <div style="font-size:16px;color:#5B6478;margin-top:8px">{{scoreText}}</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+<div style="background:#14213D;color:#F7F4EE;border-radius:14px;padding:12px;animation:az-pop .4s ease-out"><div style="font-size:12px;font-weight:700;color:#C6F36B">XP earned</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">+{{quizXp}}</div></div>
+<div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Best combo</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{bestCombo}}</div></div>
+<div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Streak</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{streak}} 🔥</div></div>
 </div>
 <sc-if value="{{hasMissed}}" hint-placeholder-val="{{ false }}">
 <div>
@@ -616,6 +656,29 @@ const sayText = (text, lang, rate, cb) => {
   } catch (e) { fin(); }
 };
 const speakNow = (fr, rate) => { sayText(speakText(fr), 'fr-FR', rate || 0.9); };
+// Short sound effects made with Web Audio (no files to download).
+let AC = null;
+const tone = (seq) => {
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    let t = AC.currentTime;
+    seq.forEach(([f, d, type]) => {
+      const o = AC.createOscillator(), g = AC.createGain();
+      o.type = type || 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.2, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + d + 0.02); t += d * 0.8;
+    });
+  } catch (e) {}
+};
+const SFX = {
+  ok: () => tone([[660, 0.1], [990, 0.16]]),
+  bad: () => tone([[200, 0.22, 'triangle']]),
+  win: () => tone([[523, 0.12], [659, 0.12], [784, 0.12], [1047, 0.32]])
+};
+// XP: 10 per right answer, +5 while on a combo of 3 or more. Levels need 100, 200, 300… more XP each.
+const XP_RIGHT = 10, XP_COMBO = 5, XP_DAILY_GOAL = 50, LESSON_NEW = 4, LESSON_LEN = 12;
+const levelOf = (xp) => { let lv = 1, need = 100, base = 0; while (xp >= base + need) { base += need; lv++; need += 100; } return { lv, into: xp - base, need }; };
 const ACCENTS = ['é', 'è', 'ê', 'à', 'â', 'ç', 'ô', 'î', 'û', 'ù', 'ï', 'œ', '’'];
 const Q_MODES = [
   { id: 'enfr', label: 'English text', sub: 'You give the French' },
@@ -654,7 +717,7 @@ class Component extends DCLogic {
     super(props);
     let wd = {};
     try { wd = JSON.parse(localStorage.getItem('allez_vocab_v3') || '{}') || {}; } catch (e) { wd = {}; }
-    this.state = { screen: 'home', topic: 0, wd, tm: this.loadTm(), query: '', pool: null, qm: 'mix', am: 'type', len: 10,
+    this.state = { screen: 'home', topic: 0, wd, tm: this.loadTm(), xp: this.loadXp(), combo: 0, lastGain: 0, query: '', pool: null, qm: 'mix', am: 'type', len: 10,
       speed: 0.9, incEn: false, cover: 'none', rev: {}, playIdx: -1,
       q: null, pick: null, typed: '', heard: [], listening: false, micErr: '', checked: false, correct: false, almost: false, forceType: false };
     this._tok = 0; this._rec = null;
@@ -664,6 +727,8 @@ class Component extends DCLogic {
   }
   loadTm() { try { const o = JSON.parse(localStorage.getItem('allez_time_v1') || '{}') || {}; return { d: o.d || {}, goal: o.goal || 60 }; } catch (e) { return { d: {}, goal: 60 }; } }
   saveTm(fn) { const o = this.loadTm(); fn(o); try { localStorage.setItem('allez_time_v1', JSON.stringify(o)); } catch (e) {} this.setState({ tm: o }); }
+  loadXp() { try { const o = JSON.parse(localStorage.getItem('allez_xp_v1') || '{}') || {}; return { total: o.total || 0, d: o.d || {} }; } catch (e) { return { total: 0, d: {} }; } }
+  addXp(n) { const o = this.loadXp(); const k = this.dayKey(); o.total += n; o.d[k] = (o.d[k] || 0) + n; try { localStorage.setItem('allez_xp_v1', JSON.stringify(o)); } catch (e) {} return o; }
   dayKey() { const t = new Date(); return t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0'); }
   flushTime() { if (this._pend > 0) { const add = this._pend; this._pend = 0; const k = this.dayKey(); this.saveTm((o) => { o.d[k] = (o.d[k] || 0) + add; }); } }
   componentDidMount() {
@@ -772,11 +837,13 @@ class Component extends DCLogic {
     const aModes = A_MODES.map((c) => { const off = (c.id === 'sound' && !speechOk) || (c.id === 'speak' && !SRC); return Object.assign(mkMode(c, s.am === c.id, off), { pick: () => { if (!off) this.setState({ am: c.id }); } }); });
     const lens = [10, 20, 30].map((n) => ({ label: String(n), pressed: s.len === n ? 'true' : 'false', style: 'flex:1;min-height:48px;border-radius:12px;font-weight:700;font-size:16px;color:' + (s.len === n ? '#fff' : INK) + ';background:' + (s.len === n ? accent : '#fff') + ';border:2px solid ' + (s.len === n ? accent : '#D9D4C7'), pick: () => this.setState({ len: n }) }));
 
-    const buildItems = (ids, qm, am, len) => {
-      const pick = shuffle(ids).slice(0, len);
-      return pick.map((id) => {
+    const buildItems = (ids, qm, am, len) => shuffle(ids).slice(0, len).map((id) => {
+      const qk = qm === 'mix' ? shuffle(speechOk ? ['enfr', 'fren', 'vfr', 'ven'] : ['enfr', 'fren'])[0] : qm;
+      return makeItem(id, qk, am);
+    });
+    // One question: word `id`, asked as `qk` (question mode), answered as `am` (answer mode).
+    const makeItem = (id, qk, am) => {
         const w = WORDS[id];
-        let qk = qm === 'mix' ? shuffle(speechOk ? ['enfr', 'fren', 'vfr', 'ven'] : ['enfr', 'fren'])[0] : qm;
         if (!speechOk && (qk === 'vfr' || qk === 'ven')) qk = qk === 'vfr' ? 'enfr' : 'fren';
         const ansLang = qk === 'enfr' || qk === 'vfr' ? 'fr' : 'en';
         let ak = am;
@@ -794,16 +861,39 @@ class Component extends DCLogic {
         }
         const options = (ak === 'pick' || ak === 'sound') ? shuffle([answer].concat(w.v ? distractVerb(w, p, ansLang) : distractWord(w, ansLang))) : [];
         return { id, v: w.v, p, qk, ak, ansLang, answer, frShown, vars, options };
-      });
     };
     const reset = { pick: null, typed: '', heard: [], listening: false, micErr: '', checked: false, correct: false, almost: false, forceType: false };
     const autoSay = (it) => { if (it && (it.qk === 'vfr' || it.qk === 'ven' || it.qk === 'fren')) setTimeout(() => speakNow(it.frShown, 0.9), 200); };
-    const runQuiz = (ids) => {
-      const st = this.state; const items = buildItems(ids, st.qm, st.am, st.len);
+    const launch = (items, ids, lesson) => {
       this.stopAll();
-      this.setState(Object.assign({ screen: 'play', q: { items, i: 0, right: 0, missed: [], ids } }, reset));
+      this.setState(Object.assign({ screen: 'play', combo: 0, lastGain: 0, q: { items, i: 0, right: 0, missed: [], ids, lesson, xp: 0, best: 0 } }, reset));
       autoSay(items[0]);
     };
+    const runQuiz = (ids) => { const st = this.state; launch(buildItems(ids, st.qm, st.am, st.len), ids, false); };
+
+    // TODAY'S LESSON: a few new words (each seen twice: recognise, then recall),
+    // the reviews due today and a couple of past mistakes. No setup screen.
+    const seenIds = allIds.filter((id) => s.wd[id] && s.wd[id].t > 0);
+    const freshIds = allIds.filter((id) => !(s.wd[id] && (s.wd[id].t > 0 || s.wd[id].k)));
+    const buildLesson = () => {
+      const used = new Set();
+      const take = (list, n) => { const out = []; for (const id of list) { if (out.length >= n) break; if (!used.has(id)) { used.add(id); out.push(id); } } return out; };
+      const fresh = take(freshIds, LESSON_NEW); // in course order: topic 1 first
+      const reviews = take(shuffle(dueIds), 6).concat(take(shuffle(weakIds), 2));
+      const room = LESSON_LEN - fresh.length * 2 - reviews.length;
+      if (room > 0) reviews.push(...take(shuffle(seenIds), room));
+      const filled = fresh.length * 2 + reviews.length;
+      if (filled < LESSON_LEN) fresh.push(...take(freshIds, Math.ceil((LESSON_LEN - filled) / 2)));
+      const reviewQ = () => shuffle(speechOk ? ['enfr', 'fren', 'enfr', 'vfr'] : ['enfr', 'fren'])[0];
+      const newItem = (id, qk) => Object.assign(makeItem(id, qk, 'pick'), { isNew: true });
+      const revItems = reviews.map((id) => makeItem(id, reviewQ(), Math.random() < 0.4 ? 'type' : 'pick'));
+      const half = Math.ceil(revItems.length / 2);
+      // First half: meet the new words. Second half: recall them in French.
+      const first = shuffle(fresh.map((id) => newItem(id, 'fren')).concat(revItems.slice(0, half)));
+      const second = shuffle(fresh.map((id) => newItem(id, 'enfr')).concat(revItems.slice(half)));
+      return { items: first.concat(second), ids: fresh.concat(reviews) };
+    };
+    const startLesson = () => { const L = buildLesson(); if (L.items.length) launch(L.items, L.ids, true); };
     const startQuiz = () => runQuiz(this.state.pool.ids);
     const retryMissed = () => { const m = this.state.q.missed; if (m.length) runQuiz(m); };
 
@@ -840,12 +930,18 @@ class Component extends DCLogic {
       else if (ak === 'speak') ok = st.heard.some((h) => matches(h).ok);
       else ok = st.pick === it.answer;
       const q = Object.assign({}, st.q); if (ok) q.right += 1; else q.missed = q.missed.concat([it.id]);
-      this.setState({ checked: true, correct: ok, almost, q, wd: this.touch(it.id, ok) });
+      // Combo and XP. XP is saved right away so quitting mid-quiz keeps it.
+      const combo = ok ? st.combo + 1 : 0;
+      const gain = ok ? XP_RIGHT + (combo >= 3 ? XP_COMBO : 0) : 0;
+      q.xp += gain; q.best = Math.max(q.best, combo);
+      const xp = gain ? this.addXp(gain) : st.xp;
+      if (ok) SFX.ok(); else SFX.bad();
+      this.setState({ checked: true, correct: ok, almost, q, combo, lastGain: gain, xp, wd: this.touch(it.id, ok) });
       speakNow(it.frShown, 0.9);
     };
     const next = () => {
       const st = this.state; const q = st.q; const ni = q.i + 1;
-      if (ni >= q.items.length) { this.stopAll(); this.setState(Object.assign({ screen: 'result', q: Object.assign({}, q, { i: ni }) }, reset)); return; }
+      if (ni >= q.items.length) { this.stopAll(); this.flushTime(); SFX.win(); this.setState(Object.assign({ screen: 'result', q: Object.assign({}, q, { i: ni }) }, reset)); return; }
       this.setState(Object.assign({ q: Object.assign({}, q, { i: ni }) }, reset));
       autoSay(q.items[ni]);
     };
@@ -866,7 +962,7 @@ class Component extends DCLogic {
     const total = Q ? Q.items.length : 0;
     const missed = Q ? Array.from(new Set(Q.missed)).map((id) => ({ fr: WORDS[id].fr, en: WORDS[id].en, say: say(WORDS[id]) })) : [];
     const pct = Q && total ? Math.round((Q.right / total) * 100) : 0;
-    const fbTitle = ok ? 'Bien joué!' : s.almost ? 'Almost! Mind the accents.' : 'Not quite.';
+    const fbTitle = ok ? 'Bien joué ! +' + s.lastGain + ' XP' + (s.combo >= 3 ? ' 🔥' : '') : s.almost ? 'Almost! Mind the accents.' : 'Not quite.';
     const fbPair = it ? (it.v ? it.frShown + ' = ' + w.en + ' (' + PRON[it.p] + ')' : w.fr + ' = ' + w.en) : '';
 
     // STUDY LOG
@@ -875,9 +971,12 @@ class Component extends DCLogic {
     const secOf = (k) => tm.d[k] || 0;
     const fmt = (sec) => { const m = Math.floor(sec / 60); return m >= 60 ? Math.floor(m / 60) + ' h ' + String(m % 60).padStart(2, '0') + ' min' : m + ' min'; };
     const dayBack = (n) => { const dt = new Date(today.getFullYear(), today.getMonth(), today.getDate() - n); return dt; };
-    let streak = 0; for (let n = secOf(tkey) >= 60 ? 0 : 1; n < 4000; n++) { if (secOf(keyOf(dayBack(n))) >= 60) streak++; else break; }
+    // A day counts as studied from 1 minute of study time or any XP earned.
+    const studied = (k) => secOf(k) >= 60 || (s.xp.d[k] || 0) > 0;
+    const studiedToday = studied(tkey);
+    let streak = 0; for (let n = studiedToday ? 0 : 1; n < 4000; n++) { if (studied(keyOf(dayBack(n)))) streak++; else break; }
     const keysAll = Object.keys(tm.d).filter((k) => tm.d[k] > 0).sort();
-    const daysStudied = keysAll.filter((k) => tm.d[k] >= 60).length;
+    const daysStudied = Array.from(new Set(keysAll.concat(Object.keys(s.xp.d)))).filter(studied).length;
     let courseDay = 1;
     if (keysAll.length) { const [y, mo, dd] = keysAll[0].split('-').map(Number); courseDay = Math.floor((new Date(today.getFullYear(), today.getMonth(), today.getDate()) - new Date(y, mo - 1, dd)) / DAY) + 1; }
     const totalSec = keysAll.reduce((a, k) => a + tm.d[k], 0);
@@ -891,7 +990,31 @@ class Component extends DCLogic {
     const goalBar = 'display:block;height:100%;border-radius:999px;background:' + (todaySec >= goalSec ? '#1F7A4D' : accent) + ';width:' + gp + '%;transition:width .3s';
     const addMin = (n) => () => { const k = this.dayKey(); this.saveTm((o) => { o.d[k] = Math.max(0, (o.d[k] || 0) + n * 60); }); };
 
+    // TODAY card
+    const xpToday = s.xp.d[tkey] || 0;
+    const lvl = levelOf(s.xp.total);
+    const goalDone = xpToday >= XP_DAILY_GOAL;
+    const nNewToday = Math.min(LESSON_NEW, freshIds.length);
+    const confettiBits = Array.from({ length: 24 }, (_, i) => ({
+      ch: ['🎉', '⭐', '🥐', '🇫🇷', '✨', '🔥'][i % 6],
+      style: 'position:absolute;top:0;left:' + ((i * 37) % 96) + '%;font-size:' + (18 + (i % 4) * 6) + 'px;animation:az-fall ' + (2.4 + (i % 5) * 0.45).toFixed(2) + 's ' + ((i * 0.17) % 1.6).toFixed(2) + 's ease-in both'
+    }));
+
     return {
+      flameStyle: 'font-size:38px;line-height:1;flex:none;' + (studiedToday ? '' : 'filter:grayscale(1);opacity:0.45'),
+      streakTitle: streak > 0 ? streak + '-day streak' : 'Start a streak',
+      streakSub: goalDone ? 'Goal reached today. À demain !' : studiedToday ? 'Streak safe today. Reach your goal!' : streak > 0 ? 'Do a lesson today to keep it alive' : 'One short lesson a day is enough',
+      level: lvl.lv, xpTotal: s.xp.total,
+      xpTodayText: Math.min(xpToday, XP_DAILY_GOAL) + ' / ' + XP_DAILY_GOAL + ' XP' + (goalDone ? ' ✓' : ''),
+      xpGoalBar: 'height:100%;border-radius:999px;background:#C6F36B;width:' + Math.min(100, Math.round((xpToday / XP_DAILY_GOAL) * 100)) + '%;transition:width .4s',
+      startLesson,
+      lessonLabel: goalDone ? 'Do another lesson' : xpToday > 0 ? 'Continue today’s lesson' : 'Start today’s lesson',
+      lessonBtn: 'min-height:58px;border:0;border-radius:16px;background:#C6F36B;color:#14213D;font-weight:700;font-size:18px;box-shadow:0 4px 0 #8FBF3A;' + (goalDone ? '' : 'animation:az-pulse 2.2s ease-in-out infinite'),
+      lessonSub: (nNewToday ? nNewToday + ' new words' : 'All words seen') + ' · ' + dueIds.length + ' reviews due · about 5 min',
+      isNewQ: !!(it && it.isNew), showCombo: s.combo >= 2 && s.screen === 'play', combo: s.combo,
+      resultKicker: Q && Q.lesson ? 'Lesson complete!' : 'Quiz finished',
+      confetti: !!(Q && Q.lesson && s.screen === 'result'), confettiBits,
+      quizXp: Q ? Q.xp : 0, bestCombo: Q ? Q.best : 0,
       showTimer: s.screen !== 'stats',
       timerText: (() => { const t = todaySec + (this._pend || 0); const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), sc = t % 60; const p = (n) => String(n).padStart(2, '0'); return 'Day ' + courseDay + ' · ' + (h > 0 ? h + ':' + p(m) : m) + ':' + p(sc); })(),
       isStats: s.screen === 'stats', openStats: () => { this.flushTime(); this.setState({ screen: 'stats' }); },
