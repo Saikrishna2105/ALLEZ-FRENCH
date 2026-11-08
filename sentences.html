@@ -42,7 +42,7 @@ Vocabulary
 <div style="font-size:15px;color:#A9B4C6;margin-top:8px;line-height:1.4">Words are bricks. Here you build the wall: hear a sentence, assemble it, fill the gap, write it down.</div>
 </div>
 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
-<div style="background:#172A44;border-radius:14px;padding:12px"><div style="font-size:12px;color:#A9B4C6;font-weight:700">Levels cleared</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:28px">{{nDone}} <span style="font-size:16px;color:#A9B4C6">/ 8</span></div></div>
+<div style="background:#172A44;border-radius:14px;padding:12px"><div style="font-size:12px;color:#A9B4C6;font-weight:700">Levels cleared</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:28px">{{nDone}} <span style="font-size:16px;color:#A9B4C6">/ {{nLevels}}</span></div></div>
 <div style="background:#172A44;border-radius:14px;padding:12px"><div style="font-size:12px;color:#A9B4C6;font-weight:700">Sentences</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:28px">{{nSent}}</div></div>
 </div>
 <div style="display:flex;flex-direction:column;gap:10px">
@@ -303,7 +303,39 @@ Je cherche une pharmacie.|I am looking for a pharmacy.|cherche|cherches,cherchon
 Il faut acheter du pain.|You need to buy bread.|acheter|acheté,achète,achetez|
 Vous avez la monnaie ?|Do you have change?|avez|avons,ont,avoir|
 Je n’ai pas de carte.|I do not have a card.|pas|non,sans,rien|
-Merci beaucoup, bonne journée !|Thank you very much, have a good day!|journée|jour,journées,journal|` }
+Merci beaucoup, bonne journée !|Thank you very much, have a good day!|journée|jour,journées,journal|` },
+{ title: 'Numbers, prices and dates', tips: [['Numbers','70 = soixante-dix (60 + 10), 80 = quatre-vingts (4 × 20), 90 = quatre-vingt-dix. 21 = vingt et un. The Numbers trainer on the Lessons tab drills them.'],['Prices','C’est combien ? Ça coûte… Ça fait douze euros cinquante. French writes 12,50 € with a comma.'],['Dates and times','le premier mai, le quatorze juillet. Il est neuf heures et quart. Days and months have no capital letter.']],
+  s: `C’est combien ?|How much is it?|combien|comment,quand,où|
+Ça coûte douze euros.|It costs twelve euros.|coûte|coûtent,coûter,coûtez|
+Ça fait vingt euros cinquante.|That comes to twenty euros fifty.|fait|fais,font,faire|
+Je voudrais trois baguettes.|I would like three baguettes.|trois|treize,trente,troisième|
+Mon anniversaire est le premier mai.|My birthday is the first of May.|premier|un,première,deuxième|
+Nous sommes le quatorze juillet.|It is the fourteenth of July.|quatorze|quarante,quatre,quinze|
+Mon grand-père a soixante-dix ans.|My grandfather is seventy.|soixante-dix|soixante,soixante-douze,sept|
+Il y a quatre-vingts étudiants.|There are eighty students.|quatre-vingts|quatre-vingt,quarante,quatre|
+Le train part à dix-huit heures.|The train leaves at six pm.|dix-huit|dix-sept,huit,dix|
+Il est neuf heures et quart.|It is quarter past nine.|quart|demie,moins,heure|
+La chambre coûte cent euros par nuit.|The room costs a hundred euros a night.|cent|cents,mille,sans|
+Je suis né en deux mille.|I was born in 2000.|mille|milles,cent,mil|
+Vous payez par carte ?|Are you paying by card?|payez|payons,paient,payer|
+Le magasin ouvre à huit heures.|The shop opens at eight.|ouvre|ouvert,ouvrent,ouvrir|
+Mon bus arrive dans dix minutes.|My bus arrives in ten minutes.|arrive|arrivent,arrivé,arriver|` },
+{ title: 'Likes, free time and plans', tips: [['Likes','J’aime, j’adore, je préfère, je déteste + le, la, les or a verb: J’aime le foot. J’adore danser.'],['Free time','faire du sport, du vélo, de la natation · jouer au foot, aux cartes (games) · jouer du piano (instruments).'],['Plans','aller + infinitive: Je vais voyager. Inviting: Tu veux venir ? Answering: Je ne peux pas, je travaille.']],
+  s: `J’aime le cinéma.|I like the cinema.|le|la,les,du|
+J’adore danser le samedi soir.|I love dancing on Saturday nights.|danser|danse,dansé,danses|
+Je préfère le thé au café.|I prefer tea to coffee.|préfère|préfères,préférons,préférer|
+Elle déteste le sport.|She hates sport.|déteste|détestes,détestent,détester|
+Il fait du vélo le dimanche.|He cycles on Sundays.|vélo|piano,cartes,football|
+Nous jouons au football.|We play football.|au|à,du,aux|
+Tu joues du piano ?|Do you play the piano?|du|au,de,le|
+Qu’est-ce que tu fais ce week-end ?|What are you doing this weekend?|fais|fait,faites,faire|
+Je vais voyager en Italie.|I am going to travel to Italy.|vais|vas,va,allons|
+Demain, nous allons jouer au tennis.|Tomorrow we are going to play tennis.|allons|allez,vont,aller|
+Ce soir, ils vont regarder un film.|Tonight they are going to watch a film.|vont|va,allons,vais|
+Tu veux venir avec moi ?|Do you want to come with me?|veux|veut,voulez,vouloir|
+Je ne peux pas, je travaille.|I can’t, I’m working.|peux|peut,pouvez,pouvoir|
+On se retrouve devant le cinéma.|Let’s meet in front of the cinema.|retrouve|retrouves,retrouvent,retrouver|
+Hier, j’ai joué aux cartes.|Yesterday I played cards.|joué|jouer,joue,joues|` }
 ].map((L) => Object.assign({}, L, { s: L.s.split('\n').map((ln) => { const f = ln.split('|'); const wr = f[3] ? f[3].split(',') : [], ex = f[4] ? f[4].split(',') : []; return { fr: f[0], en: f[1], gap: f[2] || '', wrong: wr, extra: f[2] ? ex : ex.concat(wr) }; }) }));
 const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
 const norm = (s) => String(s).toLowerCase().normalize('NFC').replace(/'/g, '’').replace(/[.,!?…;:]/g, '').replace(/\s+/g, ' ').trim();
@@ -338,7 +370,13 @@ const ACCENTS = ['é', 'è', 'ê', 'à', 'â', 'ç', 'ô', 'î', 'û', 'ù', 'ï
 const mk = (sn, type) => {
   if (type === 'build') return { t: 'build', label: 'Build the sentence', prompt: sn.en, say: '', answer: sn.fr, tiles: shuffle(sn.fr.split(' ').concat(sn.extra)), sn };
   if (type === 'hear') return { t: 'hear', label: 'Listen, then build it', prompt: '', say: sn.fr, answer: sn.fr, tiles: shuffle(sn.fr.split(' ').concat(sn.extra)), sn };
-  if (type === 'gap') { const toks = sn.fr.split(' '); const gi = toks.indexOf(sn.gap); toks[gi] = '_____'; return { t: 'gap', label: 'Fill the gap', prompt: sn.en, say: '', answer: sn.gap, gapSentence: toks.join(' '), options: shuffle([sn.gap].concat(sn.wrong)), sn }; }
+  if (type === 'gap') {
+    // The gap can sit inside a tile: "pas." (punctuation) or "J’ai" (elision). Blank only the gap part.
+    const toks = sn.fr.split(' '); const bare = (t) => t.replace(/[.,!?;:]+$/, '');
+    let gi = toks.indexOf(sn.gap);
+    if (gi < 0) gi = toks.findIndex((t) => bare(t) === sn.gap || bare(t).endsWith('’' + sn.gap));
+    if (gi >= 0) { const t = toks[gi], pos = bare(t).lastIndexOf(sn.gap); toks[gi] = t.slice(0, pos) + '_____' + t.slice(pos + sn.gap.length); }
+    return { t: 'gap', label: 'Fill the gap', prompt: sn.en, say: '', answer: sn.gap, gapSentence: toks.join(' '), options: shuffle([sn.gap].concat(sn.wrong)), sn }; }
   return { t: 'dictate', label: 'Dictation: write it', prompt: '', say: sn.fr, answer: sn.fr, sn };
 };
 class Component extends DCLogic {
@@ -435,7 +473,7 @@ class Component extends DCLogic {
     const nextIdx = s.lv + 1;
     return {
       isHome: s.screen === 'home', isIntro: s.screen === 'intro', isPlay: s.screen === 'play', isResult: s.screen === 'result',
-      nDone, nSent: LEVELS.reduce((a, l) => a + l.s.length, 0), levels, goHome,
+      nDone, nLevels: LEVELS.length, nSent: LEVELS.reduce((a, l) => a + l.s.length, 0), levels, goHome,
       lvN: s.lv + 1, lvTitle: L.title, tips, preview, startLevel,
       quit: goHome, ex, bar: 'height:100%;border-radius:999px;background:#C6F36B;width:' + (sess ? Math.round((progressed / sess.total) * 100) : 0) + '%;transition:width .3s',
       pos: sess ? Math.min(progressed + 1, sess.total) + '/' + sess.total : '',

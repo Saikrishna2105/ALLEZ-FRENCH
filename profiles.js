@@ -1,6 +1,6 @@
 /* Profiles: "Who's learning?" picker. Each profile has its own saved progress on this device. */
 (function () {
-  var PK = 'allez_profiles', AK = 'allez_active', KEYS = ['allez_vocab_v3', 'allez_sent_v1', 'allez_time_v1', 'allez_alpha_v1', 'allez_xp_v1'];
+  var PK = 'allez_profiles', AK = 'allez_active', KEYS = ['allez_vocab_v3', 'allez_sent_v1', 'allez_time_v1', 'allez_alpha_v1', 'allez_xp_v1', 'allez_learn_v1'];
   var AV = [['🦊', '#F4A261'], ['🐼', '#8D99AE'], ['🐸', '#7FC97F'], ['🐙', '#C77DFF'], ['🦄', '#F28BC0'], ['🐯', '#F6BD60'], ['🐧', '#4EA8DE'], ['🦁', '#E9C46A'], ['🐰', '#F5CAC3'], ['🐳', '#48CAE4']];
   var ls = window.localStorage, rawGet = ls.getItem.bind(ls), rawSet = ls.setItem.bind(ls), rawRem = ls.removeItem.bind(ls);
   function list() { try { return JSON.parse(rawGet(PK) || '[]') || []; } catch (e) { return []; } }

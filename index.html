@@ -42,7 +42,7 @@ button:disabled{cursor:default}
 <div style="flex:1;min-height:0;overflow-y:auto;padding:56px 24px 40px;display:flex;flex-direction:column;gap:16px">
 <div>
 <div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:30px;letter-spacing:-0.5px">French A1 vocabulary</div>
-<div style="font-size:14px;color:#5B6478;margin-top:4px">631 entries: 513 words in 15 topics, plus 118 verbs with all their forms.</div>
+<div style="font-size:14px;color:#5B6478;margin-top:4px">{{countLine}}</div>
 </div>
 
 <!-- TODAY: streak, XP and the one-tap daily lesson -->
@@ -74,7 +74,7 @@ button:disabled{cursor:default}
 <button onClick="{{openStats}}" style="align-self:flex-end;min-height:44px;border:0;background:transparent;color:#1E3FAE;font-weight:700;font-size:14px;padding:0 2px">Study log ›</button>
 
 <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
-<div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Mastered</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{nMastered}}</div><div style="font-size:12px;color:#5B6478">of 631</div></div>
+<div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Mastered</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{nMastered}}</div><div style="font-size:12px;color:#5B6478">of {{nAll}}</div></div>
 <div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Due today</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{nDue}}</div><div style="font-size:12px;color:#5B6478">to review</div></div>
 <div style="background:#fff;border:1px solid #D9D4C7;border-radius:14px;padding:12px"><div style="font-size:12px;color:#5B6478;font-weight:700">Mistakes</div><div style="font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:26px">{{nWeak}}</div><div style="font-size:12px;color:#5B6478">to fix</div></div>
 </div>
@@ -570,6 +570,25 @@ const TOPICS = RAW.map((t, ti) => {
   });
   TOPICS.push({ title: 'Verbs: the forms you say', ids, verb: true });
 })();
+// Topics added later. They are appended AFTER the verbs so the ids of existing
+// entries (and everyone's saved progress) stay the same; COURSE sets the order shown.
+[
+['Numbers', `zéro=0|un=1|deux=2|trois=3|quatre=4|cinq=5|six=6|sept=7|huit=8|neuf=9|dix=10|onze=11|douze=12|treize=13|quatorze=14|quinze=15|seize=16|dix-sept=17|dix-huit=18|dix-neuf=19|vingt=20|vingt et un=21|vingt-deux=22|trente=30|quarante=40|cinquante=50|soixante=60|soixante-dix=70|soixante et onze=71|quatre-vingts=80|quatre-vingt-un=81|quatre-vingt-dix=90|cent=100|deux cents=200|mille=1000|deux mille=2000|premier / première=first|deuxième=second|troisième=third|dernier / dernière=last|la moitié=half|le numéro de téléphone=phone number`],
+['Countries and nationalities', `l'Angleterre (f.)=England|le Royaume-Uni=the United Kingdom|les États-Unis (m.)=the United States|le Canada=Canada|l'Allemagne (f.)=Germany|l'Espagne (f.)=Spain|l'Italie (f.)=Italy|la Belgique=Belgium|la Suisse=Switzerland|l'Inde (f.)=India|la Chine=China|le Japon=Japan|le Maroc=Morocco|le Brésil=Brazil|l'Europe (f.)=Europe|français(e)=French (nationality)|anglais(e)=English (nationality)|américain(e)=American|allemand(e)=German|espagnol(e)=Spanish|italien(ne)=Italian|indien(ne)=Indian|chinois(e)=Chinese|japonais(e)=Japanese|canadien(ne)=Canadian|belge=Belgian|suisse=Swiss|la nationalité=nationality|étranger / étrangère=foreign / foreigner|l'espagnol (m.)=Spanish (language)|l'allemand (m.)=German (language)`],
+['Jobs', `l'infirmier / l'infirmière=nurse|l'ingénieur(e)=engineer|l'avocat(e)=lawyer|le serveur / la serveuse=waiter / waitress|le cuisinier / la cuisinière=cook|le vendeur / la vendeuse=shop assistant|le boulanger / la boulangère=baker|le chauffeur=driver|le policier / la policière=police officer|l'acteur / l'actrice=actor / actress|le chanteur / la chanteuse=singer|le journaliste / la journaliste=journalist|le secrétaire / la secrétaire=secretary|l'informaticien(ne)=IT specialist|le directeur / la directrice=manager|l'employé(e)=employee|l'agriculteur / l'agricultrice=farmer|le dentiste / la dentiste=dentist|retraité(e)=retired|au chômage=unemployed|l'entreprise (f.)=company|le salaire=salary|à temps partiel=part-time`]
+].forEach(([title, list]) => {
+  const ids = [];
+  list.split('|').forEach((p) => {
+    const k = p.indexOf('=');
+    const w = { id: WORDS.length, tp: TOPICS.length, v: false, fr: p.slice(0, k).replace(/'/g, '’'), en: p.slice(k + 1).replace(/'/g, '’') };
+    WORDS.push(w); ids.push(w.id);
+  });
+  TOPICS.push({ title, ids, verb: false });
+});
+// The order topics are shown and taught in (indexes into TOPICS).
+const VERB_TOPIC = 15;
+const COURSE = [0, 16, 2, 17, 18, 1, 3, 4, 5, 8, 7, 6, 9, 10, 11, 12, 13, 14, VERB_TOPIC];
+const N_ALL = WORDS.length, N_VERBS = TOPICS[VERB_TOPIC].ids.length;
 const DAY = 86400000, INT = [0, 1, 2, 4, 8, 16];
 const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
 const norm = (s) => String(s).toLowerCase().normalize('NFC').replace(/'/g, '’').replace(/[.,!?…;:]/g, '').replace(/\s+/g, ' ').trim();
@@ -704,12 +723,12 @@ const distractWord = (w, lang) => {
 const distractVerb = (w, p, lang) => {
   if (lang === 'en') {
     const seen = new Set([w.en]); const out = [];
-    for (const c of shuffle(TOPICS[TOPICS.length - 1].ids.map((i) => WORDS[i]))) { if (c.id !== w.id && !seen.has(c.en)) { seen.add(c.en); out.push(c.en); } if (out.length === 3) break; }
+    for (const c of shuffle(TOPICS[VERB_TOPIC].ids.map((i) => WORDS[i]))) { if (c.id !== w.id && !seen.has(c.en)) { seen.add(c.en); out.push(c.en); } if (out.length === 3) break; }
     return out;
   }
   const answer = w.forms[p]; const seen = new Set([answer]); const out = [];
   shuffle(validForms(w)).forEach((i) => { if (out.length < 2 && !seen.has(w.forms[i])) { seen.add(w.forms[i]); out.push(w.forms[i]); } });
-  for (const c of shuffle(TOPICS[TOPICS.length - 1].ids.map((i) => WORDS[i]))) { if (out.length >= 3) break; if (c.id !== w.id && c.forms[p] !== '—' && !seen.has(c.forms[p])) { seen.add(c.forms[p]); out.push(c.forms[p]); } }
+  for (const c of shuffle(TOPICS[VERB_TOPIC].ids.map((i) => WORDS[i]))) { if (out.length >= 3) break; if (c.id !== w.id && c.forms[p] !== '—' && !seen.has(c.forms[p])) { seen.add(c.forms[p]); out.push(c.forms[p]); } }
   return out;
 };
 class Component extends DCLogic {
@@ -783,9 +802,9 @@ class Component extends DCLogic {
     const qs = s.query.trim();
     const qn = plain(qs);
     const results = qs ? WORDS.filter((w) => plain(w.fr).indexOf(qn) >= 0 || plain(w.en).indexOf(qn) >= 0).slice(0, 30).map((w) => ({ fr: w.fr, en: w.en, say: say(w) })) : [];
-    const topics = TOPICS.map((t, i) => {
+    const topics = COURSE.map((i, pos) => { const t = TOPICS[i];
       const m = t.ids.filter(isMastered).length;
-      return { n: i + 1, title: t.title, prog: m + '/' + t.ids.length, bar: 'display:block;height:100%;border-radius:999px;background:#1F7A4D;width:' + Math.round((m / t.ids.length) * 100) + '%',
+      return { n: pos + 1, title: t.title, prog: m + '/' + t.ids.length, bar: 'display:block;height:100%;border-radius:999px;background:#1F7A4D;width:' + Math.round((m / t.ids.length) * 100) + '%',
         open: () => this.setState({ screen: 'topic', topic: i, rev: {}, playIdx: -1 }) };
     });
 
@@ -874,11 +893,16 @@ class Component extends DCLogic {
     // TODAY'S LESSON: a few new words (each seen twice: recognise, then recall),
     // the reviews due today and a couple of past mistakes. No setup screen.
     const seenIds = allIds.filter((id) => s.wd[id] && s.wd[id].t > 0);
-    const freshIds = allIds.filter((id) => !(s.wd[id] && (s.wd[id].t > 0 || s.wd[id].k)));
+    const isFresh = (id) => !(s.wd[id] && (s.wd[id].t > 0 || s.wd[id].k));
+    const freshWords = COURSE.filter((ti) => ti !== VERB_TOPIC).flatMap((ti) => TOPICS[ti].ids).filter(isFresh);
+    const freshVerbs = TOPICS[VERB_TOPIC].ids.filter(isFresh);
+    const freshIds = freshWords.concat(freshVerbs);
     const buildLesson = () => {
       const used = new Set();
       const take = (list, n) => { const out = []; for (const id of list) { if (out.length >= n) break; if (!used.has(id)) { used.add(id); out.push(id); } } return out; };
-      const fresh = take(freshIds, LESSON_NEW); // in course order: topic 1 first
+      // In course order: 3 new words from the topics + 1 new verb (être, avoir, aller… first).
+      const fresh = take(freshWords, LESSON_NEW - 1).concat(take(freshVerbs, 1));
+      if (fresh.length < LESSON_NEW) fresh.push(...take(freshIds, LESSON_NEW - fresh.length));
       const reviews = take(shuffle(dueIds), 6).concat(take(shuffle(weakIds), 2));
       const room = LESSON_LEN - fresh.length * 2 - reviews.length;
       if (room > 0) reviews.push(...take(shuffle(seenIds), room));
@@ -1010,7 +1034,7 @@ class Component extends DCLogic {
       startLesson,
       lessonLabel: goalDone ? 'Do another lesson' : xpToday > 0 ? 'Continue today’s lesson' : 'Start today’s lesson',
       lessonBtn: 'min-height:58px;border:0;border-radius:16px;background:#C6F36B;color:#14213D;font-weight:700;font-size:18px;box-shadow:0 4px 0 #8FBF3A;' + (goalDone ? '' : 'animation:az-pulse 2.2s ease-in-out infinite'),
-      lessonSub: (nNewToday ? nNewToday + ' new words' : 'All words seen') + ' · ' + dueIds.length + ' reviews due · about 5 min',
+      lessonSub: (nNewToday ? nNewToday + ' new words' : 'All words seen') + ' · ' + dueIds.length + (dueIds.length === 1 ? ' review' : ' reviews') + ' due · about 5 min',
       isNewQ: !!(it && it.isNew), showCombo: s.combo >= 2 && s.screen === 'play', combo: s.combo,
       resultKicker: Q && Q.lesson ? 'Lesson complete!' : 'Quiz finished',
       confetti: !!(Q && Q.lesson && s.screen === 'result'), confettiBits,
@@ -1033,14 +1057,15 @@ class Component extends DCLogic {
       weakBtn: 'flex:1;min-height:48px;border-radius:14px;font-weight:700;font-size:15px;background:transparent;border:1.5px solid ' + (weakIds.length ? INK : '#D9D4C7') + ';color:' + (weakIds.length ? INK : '#5B6478'),
       reviewDue: openSetup('Entries due today (' + dueIds.length + ')', dueIds, 'home'),
       fixWeak: openSetup('My mistakes (' + weakIds.length + ')', weakIds, 'home'),
-      quizAll: openSetup('Everything: all 631 entries', allIds, 'home'),
+      quizAll: openSetup('Everything: all ' + N_ALL + ' entries', allIds, 'home'),
+      nAll: N_ALL, countLine: N_ALL + ' entries: ' + (N_ALL - N_VERBS) + ' words in ' + (COURSE.length - 1) + ' topics, plus ' + N_VERBS + ' verbs with all their forms.',
       query: s.query, onSearch: (e) => this.setState({ query: e.target.value }), hasQuery: qs.length > 0, noQuery: qs.length === 0, results, noResults: qs.length > 0 && results.length === 0, topics,
       backHome,
-      curN: s.topic + 1, curTitle: T.title, curCount: T.ids.length, curUnit: T.verb ? 'verbs' : 'words', isVerbTopic: T.verb, rows, covers,
+      curN: COURSE.indexOf(s.topic) + 1, curTitle: T.title, curCount: T.ids.length, curUnit: T.verb ? 'verbs' : 'words', isVerbTopic: T.verb, rows, covers,
       playLabel: s.playIdx >= 0 ? 'Stop' : 'Play all', playStyle: 'flex:1;min-height:44px;border-radius:999px;font-weight:700;font-size:15px;border:0;background:' + (s.playIdx >= 0 ? '#B3261E' : accent) + ';color:#fff', togglePlay,
       chipStyle: pill(false), speedLabel: s.speed < 0.8 ? 'Slow' : 'Normal', toggleSpeed: () => this.setState({ speed: this.state.speed < 0.8 ? 0.9 : 0.6 }),
       enPressed: s.incEn ? 'true' : 'false', enChipStyle: pill(s.incEn), toggleEn: () => this.setState({ incEn: !this.state.incEn }),
-      quizTopic: openSetup('Topic ' + (s.topic + 1) + ': ' + T.title + ' (' + T.ids.length + (T.verb ? ' verbs)' : ' words)'), T.ids, 'topic'),
+      quizTopic: openSetup('Topic ' + (COURSE.indexOf(s.topic) + 1) + ': ' + T.title + ' (' + T.ids.length + (T.verb ? ' verbs)' : ' words)'), T.ids, 'topic'),
       poolLabel: s.pool ? s.pool.label : '', qModes, aModes, lens, noSpeech: !speechOk, startQuiz,
       setupBack: () => this.setState({ screen: s.pool && s.pool.back === 'topic' ? 'topic' : 'home' }),
       quitQuiz: () => { this.stopAll(); this.setState({ screen: 'home', q: null }); },

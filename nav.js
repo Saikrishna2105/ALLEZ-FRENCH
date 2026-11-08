@@ -1,6 +1,6 @@
 /* Bottom tab bar shared by all pages */
 (function () {
-  var TABS = [['index.html', 'Words', '📚'], ['sentences.html', 'Sentences', '💬'], ['alphabet.html', 'Alphabet', '🔤']];
+  var TABS = [['index.html', 'Words', '📚'], ['learn.html', 'Lessons', '🎓'], ['sentences.html', 'Sentences', '💬'], ['alphabet.html', 'Alphabet', '🔤']];
   var path = location.pathname.split('/').pop() || 'index.html';
   var css = 'x-dc>div{height:calc(100vh - 64px)!important;height:calc(100dvh - 64px - env(safe-area-inset-bottom))!important}' +
     'html,body{background:#0E1A2B!important}' +
